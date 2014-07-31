@@ -48,7 +48,7 @@ class CsvFrame extends JFrame implements Serializable {
 		setTitle("CsvFrame");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-		// P�nocny panel
+		// Północny panel
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new GridLayout(2, 1));
 		info1 = new JLabel("Wprowadź dane");
@@ -85,7 +85,7 @@ class CsvFrame extends JFrame implements Serializable {
 		centerPanel.add(scrollPane);
 		add(centerPanel, BorderLayout.CENTER);
 
-		// Po�udniowy panel (Przycisk zatwierdzenia)
+		// Południowy panel (Przycisk zatwierdzenia)
 		JPanel southPanel = new JPanel();
 		JButton insertButton = new JButton("Wstaw");
 		southPanel.add(insertButton);
@@ -93,7 +93,7 @@ class CsvFrame extends JFrame implements Serializable {
 			public void actionPerformed(ActionEvent event) {
 
 				String wprowadzanyMail = email.getText();
-				// �r�d�o:
+				// źródło:
 				// http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
 				Pattern p = Pattern
 						.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
