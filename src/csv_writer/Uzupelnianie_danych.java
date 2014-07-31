@@ -1,9 +1,9 @@
 package csv_writer;
 
 /**
- * Program umo�liwijacy wprowadzanie danych do pliku CSV
+ * Program umożliwijacy wprowadzanie danych do pliku CSV
  * @date 31.07.2014
- * @version 1.03
+ * @version 1.04
  * @author Sylwester Pijanowski
  */
 
@@ -127,7 +127,7 @@ class CsvFrame extends JFrame implements Serializable {
 							+ ulica.getText() + ";" + email.getText());
 				} else {
 					view.setForeground(Color.RED);
-					view.append("\r\nZ�y adres email. Poprawna forma np.(przyklad@email.com)");
+					view.append("\r\nZły adres email. Poprawna forma np.(przyklad@email.com)");
 				}
 			}
 		});
