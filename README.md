@@ -1,8 +1,11 @@
 Praktyki
 ========
+
 Projekt jest prowadzony w ramach praktyki studenckiej.
 Zostaną w nim zawarte wszystkie programy napisane na potrzeby praktyk.
+
 ========
+
 Aktualnie znajdują sie w nim
 
 "Uzupelnianie_Danych" - Program umożliwiający wprowadzanie danych(nazwy, ulicy, email) firm do pliku CSV
