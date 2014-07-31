@@ -2,7 +2,7 @@ Praktyki
 ========
 
 Projekt jest prowadzony w ramach praktyki studenckiej.
-Zostaną w nim zawarte wszystkie programy napisane na potrzeby praktyk.
+Zostaną w nim zawarte wszystkie programy napisane na potrzeby prowadzonych prac.
 
 ========
 
