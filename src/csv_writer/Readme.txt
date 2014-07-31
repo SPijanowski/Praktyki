@@ -1,11 +1,13 @@
 Wstęp
 Program umożliwiający wprowadzanie danych(nazwy, ulicy, email, adres www, tel, NIP) firm do pliku CSV
-wersja 1.10 z dnia 31.07.2014
+wersja 1.11 z dnia 31.07.2014
 
 Nowości (W porównaniu z wersją 1.04)
 
 Dodana możliwość wprowadzania adresu strony WWW, telefonu oraz NIPU firmy.
 W razie nie wprowadzenia protokołu(http://) program automatycznie dopisuje.
+Jest przeprowadzana walidacja adresu WWW
+Dodano nową biblioteke
 
 Instalacja
 Należy mieć zainstalowane środowisko uruchomieniowe JAVY
@@ -26,8 +28,14 @@ w konsoli podświetli sie na zielono. Jednocześnie zostaną one dodane na nast�
 
 W przypadku niewłaściwego adresu email zostanie wyświetlony czerwony komunikat o błędzie.
 
+W przypadku niewłaściwego adresu WWW zostanie wyświetlony czerwony komunikat o błędzie.
+
 Informacje dodatkowe
 Kod stanowi zmodyfikowaną wersje kodu dostępnego na stronie:
 http://www.csvreader.com/java_csv_samples.php
+
 Walidacja e-mailu jest oparta o wyrażenie regularne zamieszczone na stronie
 http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
+
+Walidacja adresu URL oparta o bilblioteke dostępną pod tym adresem
+http://commons.apache.org/proper/commons-validator/download_validator.cgi
