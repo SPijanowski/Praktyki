@@ -1,5 +1,5 @@
 Wstęp
-Program umożliwi jacy wprowadzanie danych(nazwy, ulicy, email) firm do pliku CSV
+Program umożliwiający wprowadzanie danych(nazwy, ulicy, email) firm do pliku CSV
 wersja 1.04 z dnia 31.07.2014
 
 Instalacja
