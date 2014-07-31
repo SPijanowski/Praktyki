@@ -1,13 +1,11 @@
 Wstęp
 Program umożliwiający wprowadzanie danych(nazwy, ulicy, email, adres www, tel, NIP) firm do pliku CSV
-wersja 1.11 z dnia 31.07.2014
+wersja 1.2 z dnia 31.07.2014
 
-Nowości (W porównaniu z wersją 1.04)
+Nowości (W porównaniu z wersją 1.1)
 
-Dodana możliwość wprowadzania adresu strony WWW, telefonu oraz NIPU firmy.
-W razie nie wprowadzenia protokołu(http://) program automatycznie dopisuje.
-Jest przeprowadzana walidacja adresu WWW
-Dodano nową biblioteke
+Należy zawsze podawać Nazwe oraz NIP
+Wprowadzono wlidacje NIP; Musi być cyfrą z przedziału[0-9] oraz zawierać maksymalnie 10 znaków
 
 Instalacja
 Należy mieć zainstalowane środowisko uruchomieniowe JAVY
@@ -16,12 +14,12 @@ http://sourceforge.net/projects/javacsv/files/
 
 Wykorzystanie
 Aby zacząć obsługiwać należy wprowadzić w odpowiednie pola wymagane informacje
-Pole "Nazwa" - jest to nazwa przedsiębiorstwa które dane chcemy umieścić w pliku csv
+Pole "Nazwa" - jest to nazwa przedsiębiorstwa które dane chcemy umieścić w pliku csv (Wymagane pole)
 Pole "Ulica" - adres wprowadzanej firmy
 Pole "E-mail" - EMail do wprowadzanej firmy
 Pole "Adres WWW" - Adres www firmy
 Pole "tel" - tel do firmy
-Pole "NIP" - NIP firmy
+Pole "NIP" - NIP firmy cyfrą z przedziału[0-9] oraz zawierać maksymalnie 10 znaków(Wymagane pole)
 
 Jeśli operacja pójdzie pomyślnie w dolej części ekranu zostaną wyświetlone wprowadzane dane oraz tekst 
 w konsoli podświetli sie na zielono. Jednocześnie zostaną one dodane na następne wolne miejsce w pliku firmy.csv. 

@@ -3,7 +3,7 @@ package csv_writer;
 /**
  * Program umożliwijacy wprowadzanie danych do pliku CSV
  * @date 31.07.2014
- * @version 1.11
+ * @version 1.2
  * @author Sylwester Pijanowski
  */
 
@@ -46,7 +46,7 @@ class CsvFrame extends JFrame implements Serializable {
 	private JLabel info2;
 
 	public CsvFrame() {
-		setTitle("CsvFrame");
+		setTitle("CsvFrame Version 1.2");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
 		// Północny panel
@@ -65,7 +65,7 @@ class CsvFrame extends JFrame implements Serializable {
 
 		JPanel northPanel1 = new JPanel();
 		northPanel1.setLayout(new GridLayout(3, 2, 1, 5));
-		northPanel1.add(new JLabel("Nazwa: ", SwingConstants.RIGHT));
+		northPanel1.add(new JLabel("Nazwa*: ", SwingConstants.RIGHT));
 		northPanel1.add(nazwa);
 		northPanel1.add(new JLabel("Ulica: ", SwingConstants.RIGHT));
 		northPanel1.add(ulica);
@@ -75,7 +75,7 @@ class CsvFrame extends JFrame implements Serializable {
 		northPanel1.add(url);
 		northPanel1.add(new JLabel("Nr telefonu: ", SwingConstants.RIGHT));
 		northPanel1.add(tel);
-		northPanel1.add(new JLabel("nip: ", SwingConstants.RIGHT));
+		northPanel1.add(new JLabel("NIP*: ", SwingConstants.RIGHT));
 		northPanel1.add(nip);
 
 		northPanel.add(northPanel1);
@@ -90,6 +90,7 @@ class CsvFrame extends JFrame implements Serializable {
 		;
 		centerPanel.add(info2);
 		final JTextArea view = new JTextArea();
+		view.append("Pola z * są wymagane \r\n");
 		view.append("nazwa;ulica;email;WWW;Telefon;NIP");
 		view.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(view);
@@ -102,69 +103,88 @@ class CsvFrame extends JFrame implements Serializable {
 		southPanel.add(insertButton);
 		insertButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				StringBuilder aUrl = new StringBuilder(url.getText());
-				String tmp = aUrl.substring(0, 7);
-				String adresWWW;
-				if (tmp.equals("http://")) {
-					adresWWW = aUrl.toString();
-				} else {
-					StringBuilder bUrl = new StringBuilder("http://");
-					bUrl.append(aUrl);
-					adresWWW = bUrl.toString();
-				}
-				String[] schemes = { "http", "https" };
-				UrlValidator urlValidator = new UrlValidator(schemes);
-				if (urlValidator.isValid(adresWWW)) {
-					String wprowadzanyMail = email.getText();
-					// źródło:
-					// http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
-					Pattern p = Pattern
-							.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-									+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-					Matcher m = p.matcher(wprowadzanyMail);
 
-					boolean walidacja = m.matches();
-					// �r�d�o: http://www.csvreader.com/java_csv_samples.php
-					if (walidacja) {
-						boolean alreadyExists = new File(outputFile).exists();
-						try {
-							CsvWriter csvOutput = new CsvWriter(new FileWriter(
-									outputFile, true), ';');
+				Pattern pni = Pattern.compile("[0-9]{0,10}$");
+				Matcher m2 = pni.matcher(nip.getText());
+				boolean walidacjaNip = m2.matches();
+				if (!(nazwa.getText().length() == 0)
+						&& !(nip.getText().length() == 0) && walidacjaNip) {
+					StringBuilder aUrl = new StringBuilder(url.getText());
+					String tmp = aUrl.substring(0, 7);
+					String adresWWW;
+					if (tmp.equals("http://")) {
+						adresWWW = aUrl.toString();
+					} else {
+						StringBuilder bUrl = new StringBuilder("http://");
+						bUrl.append(aUrl);
+						adresWWW = bUrl.toString();
+					}
+					String[] schemes = { "http", "https" };
+					UrlValidator urlValidator = new UrlValidator(schemes);
+					if (urlValidator.isValid(adresWWW)) {
+						String wprowadzanyMail = email.getText();
+						// źródło:
+						// http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
+						Pattern p = Pattern
+								.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+										+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+						Matcher m = p.matcher(wprowadzanyMail);
 
-							if (!alreadyExists) {
-								csvOutput.write("Nazwa");
-								csvOutput.write("Ulica");
-								csvOutput.write("E-mail");
-								csvOutput.write("Strona WWW");
-								csvOutput.write("Telefon");
-								csvOutput.write("Nip");
+						boolean walidacja = m.matches();
+						// �r�d�o: http://www.csvreader.com/java_csv_samples.php
+						if (walidacja) {
+							boolean alreadyExists = new File(outputFile)
+									.exists();
+							try {
+								CsvWriter csvOutput = new CsvWriter(
+										new FileWriter(outputFile, true), ';');
+
+								if (!alreadyExists) {
+									csvOutput.write("Nazwa");
+									csvOutput.write("Ulica");
+									csvOutput.write("E-mail");
+									csvOutput.write("Strona WWW");
+									csvOutput.write("Telefon");
+									csvOutput.write("Nip");
+									csvOutput.endRecord();
+								}
+								csvOutput.write(nazwa.getText());
+								csvOutput.write(ulica.getText());
+								csvOutput.write(email.getText());
+								csvOutput.write(adresWWW);
+								csvOutput.write(tel.getText());
+								csvOutput.write(nip.getText());
 								csvOutput.endRecord();
+								csvOutput.close();
+							} catch (IOException e) {
+								e.printStackTrace();
 							}
-							csvOutput.write(nazwa.getText());
-							csvOutput.write(ulica.getText());
-							csvOutput.write(email.getText());
-							csvOutput.write(adresWWW);
-							csvOutput.write(tel.getText());
-							csvOutput.write(nip.getText());
-							csvOutput.endRecord();
-							csvOutput.close();
-						} catch (IOException e) {
-							e.printStackTrace();
+							view.setForeground(Color.GREEN);
+							view.append("\r\n" + nazwa.getText() + ";"
+									+ ulica.getText() + ";" + email.getText()
+									+ ";" + adresWWW + ";" + tel.getText()
+									+ ";" + nip.getText());
+						} else {
+							view.setForeground(Color.RED);
+							view.append("\r\nZły adres email. Poprawna forma np.(przyklad@email.com)");
 						}
-						view.setForeground(Color.GREEN);
-						view.append("\r\n" + nazwa.getText() + ";"
-								+ ulica.getText() + ";" + email.getText() + ";"
-								+ adresWWW + ";" + tel.getText()
-								+ nip.getText());
 					} else {
 						view.setForeground(Color.RED);
-						view.append("\r\nZły adres email. Poprawna forma np.(przyklad@email.com)");
+						view.append("\r\nZły adres WWW. Prosze wprowadzić nowy np.(https://www.google.pl/)");
 					}
 				} else {
-					view.setForeground(Color.RED);
-					view.append("\r\nZły adres WWW. Prosze wprowadzić nowy np.(https://www.google.pl/)");
+					if ((nazwa.getText().length() == 0)
+							&& (nip.getText().length() == 0)) {
+						view.setForeground(Color.RED);
+						view.append("\r\nProsze wprowadzić nazwe oraz NIP");
+					} else {
+						view.setForeground(Color.RED);
+						view.append("\r\nNIP musi zawierać cyfry (0-9)");
+					}
 				}
+
 			}
+
 		});
 		add(southPanel, BorderLayout.SOUTH);
 	}
