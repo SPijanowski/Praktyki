@@ -2,8 +2,8 @@ package csv_writer;
 
 /**
  * Program umo�liwijacy wprowadzanie danych do pliku CSV
- * @date 30.07.2014
- * @version 1.02
+ * @date 31.07.2014
+ * @version 1.03
  * @author Sylwester Pijanowski
  */
 
