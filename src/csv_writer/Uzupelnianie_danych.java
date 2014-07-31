@@ -3,13 +3,12 @@ package csv_writer;
 /**
  * Program umożliwijacy wprowadzanie danych do pliku CSV
  * @date 31.07.2014
- * @version 1.04
+ * @version 1.10
  * @author Sylwester Pijanowski
  */
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import java.awt.event.*;
 import java.awt.*;
 import java.io.FileWriter;
@@ -58,6 +57,9 @@ class CsvFrame extends JFrame implements Serializable {
 		final JTextField nazwa = new JTextField();
 		final JTextField ulica = new JTextField();
 		final JTextField email = new JTextField();
+		final JTextField url = new JTextField();
+		final JTextField tel = new JTextField();
+		final JTextField nip = new JTextField();
 
 		JPanel northPanel1 = new JPanel();
 		northPanel1.setLayout(new GridLayout(3, 2, 1, 5));
@@ -67,6 +69,13 @@ class CsvFrame extends JFrame implements Serializable {
 		northPanel1.add(ulica);
 		northPanel1.add(new JLabel("Email: ", SwingConstants.RIGHT));
 		northPanel1.add(email);
+		northPanel1.add(new JLabel("Adres www: ", SwingConstants.RIGHT));
+		northPanel1.add(url);
+		northPanel1.add(new JLabel("Nr telefonu: ", SwingConstants.RIGHT));
+		northPanel1.add(tel);
+		northPanel1.add(new JLabel("nip: ", SwingConstants.RIGHT));
+		northPanel1.add(nip);
+		
 		northPanel.add(northPanel1);
 
 		add(northPanel, BorderLayout.NORTH);
@@ -79,7 +88,7 @@ class CsvFrame extends JFrame implements Serializable {
 		;
 		centerPanel.add(info2);
 		final JTextArea view = new JTextArea();
-		view.append("nazwa;ulica;email");
+		view.append("nazwa;ulica;email;WWW;Telefon;NIP");
 		view.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(view);
 		centerPanel.add(scrollPane);
@@ -91,7 +100,19 @@ class CsvFrame extends JFrame implements Serializable {
 		southPanel.add(insertButton);
 		insertButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-
+				StringBuilder aUrl = new StringBuilder(url.getText());
+				String tmp = aUrl.substring(0,7);
+				String adresWWW;
+				if (tmp.equals("http://"))
+				{
+					adresWWW = aUrl.toString();
+				}
+				else
+				{
+					StringBuilder bUrl = new StringBuilder("http://");
+					bUrl.append(aUrl);
+					adresWWW = bUrl.toString();
+				}
 				String wprowadzanyMail = email.getText();
 				// źródło:
 				// http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
@@ -112,11 +133,17 @@ class CsvFrame extends JFrame implements Serializable {
 							csvOutput.write("Nazwa");
 							csvOutput.write("Ulica");
 							csvOutput.write("E-mail");
+							csvOutput.write("Strona WWW");
+							csvOutput.write("Telefon");
+							csvOutput.write("Nip");
 							csvOutput.endRecord();
 						}
 						csvOutput.write(nazwa.getText());
 						csvOutput.write(ulica.getText());
-						csvOutput.write(email.getText().trim());
+						csvOutput.write(email.getText());
+						csvOutput.write(adresWWW);
+						csvOutput.write(tel.getText());
+						csvOutput.write(nip.getText());
 						csvOutput.endRecord();
 						csvOutput.close();
 					} catch (IOException e) {
@@ -124,7 +151,7 @@ class CsvFrame extends JFrame implements Serializable {
 					}
 					view.setForeground(Color.GREEN);
 					view.append("\r\n" + nazwa.getText() + ";"
-							+ ulica.getText() + ";" + email.getText());
+							+ ulica.getText() + ";" + email.getText()+";"+adresWWW+";"+tel.getText()+nip.getText());
 				} else {
 					view.setForeground(Color.RED);
 					view.append("\r\nZły adres email. Poprawna forma np.(przyklad@email.com)");
