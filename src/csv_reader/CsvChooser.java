@@ -2,9 +2,11 @@ package csv_reader;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.Serializable;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 
@@ -15,19 +17,26 @@ public class CsvChooser extends JPanel
 	   private JButton okButton;
 	   private boolean ok;
 	   private JDialog dialog;
+	   private JFileChooser csvFileChooser;
+	   private JButton wybierz;
 
 	   public CsvChooser()
 	   {
-	      setLayout(new BorderLayout());
+	      
+		   wybierz = new JButton("Wybierz");
+		   wybierz.addActionListener(new fileOpenListener());
+		   setLayout(new BorderLayout());
 
 	      // Utworzenie panelu z polami nazwy użytkownika i hasła
-
+	      
 	      JPanel panel = new JPanel();
-	      panel.setLayout(new GridLayout(2, 2));
+	      panel.setLayout(new GridLayout(3, 2));
+	      panel.add(new JLabel("Wybierz Plik:"));
+	      panel.add(wybierz);
 	      panel.add(new JLabel("Plik Nazwa:"));
 	      panel.add(nazwa = new JTextField(""));
 	      panel.add(new JLabel("Separator:"));
-	      panel.add(separator = new JTextField(""));
+	      panel.add(separator = new JTextField(""));	      
 	      add(panel, BorderLayout.CENTER);
 
 	      // Utworzenie przycisków OK i Anuluj, które zamykają okno dialogowe
@@ -57,6 +66,13 @@ public class CsvChooser extends JPanel
 	      buttonPanel.add(okButton);
 	      buttonPanel.add(cancelButton);
 	      add(buttonPanel, BorderLayout.SOUTH);
+	      
+	      //Dodawanie przycisku wyboru pliku
+	      csvFileChooser = new JFileChooser();
+	      //Akceptowanie wyboru plików .csv
+	      FileNameExtensionFilter filter = new FileNameExtensionFilter("Pliki CSV","csv");
+	      csvFileChooser.setFileFilter(filter);
+	      
 	   }
 
 	   /**
@@ -72,9 +88,13 @@ public class CsvChooser extends JPanel
 	    * Pobiera dane podane w oknie dialogowym
 	    * @return a obiekt typu User, którego stan reprezentuje dane wprowadzone w oknie dialogowym
 	    */
-	   public Csv_File getUser()
+	   public Csv_File getCsvFile()
 	   {
 	      return new Csv_File(nazwa.getText(), separator.getText());
+	   }
+	   public Csv_File getCsvPath()
+	   {
+		   return new Csv_File(csvFileChooser.getSelectedFile().getPath());
 	   }
 
 	   /**
@@ -107,5 +127,18 @@ public class CsvChooser extends JPanel
 	      dialog.setTitle(title);
 	      dialog.setVisible(true);
 	      return ok;
+	   }
+	   private class fileOpenListener implements ActionListener
+	   {
+		   public void actionPerformed(ActionEvent event)
+		   {
+			   csvFileChooser.setCurrentDirectory(new File("."));
+			   int result = csvFileChooser.showOpenDialog(CsvChooser.this);
+			   if(result == JFileChooser.APPROVE_OPTION)
+			   {
+				   String csvFilePath = csvFileChooser.getSelectedFile().getPath();
+				   Csv_File.setCsvFilePath(csvFilePath);
+			   }
+		   }
 	   }
 	}

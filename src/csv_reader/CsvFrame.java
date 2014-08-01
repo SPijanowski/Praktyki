@@ -77,7 +77,7 @@ public class CsvFrame extends JFrame
 	        	 try {
 	     			String a = ";";
 	     			char b = a.charAt(0);
-	     			CsvReader tabela = new CsvReader("firmy.csv", b);
+	     			CsvReader tabela = new CsvReader(Csv_File.getScvFilePath(), b);
 	     					
 	     			tabela.readHeaders();
 
@@ -101,7 +101,7 @@ public class CsvFrame extends JFrame
 	     		} catch (IOException e) {
 	     			e.printStackTrace();
 	     		}
-	        	 Csv_File u = dialog.getUser();
+	        	 Csv_File u = dialog.getCsvFile();
 	            csvInsert.append("nazwa użytkownika = " + u.getNazwa() + ", hasło = "
 	                  + (new String(u.getSeparator())) + "\r\n");
 	         }
