@@ -1,5 +1,12 @@
 package csv_reader;
 
+/**
+ * Program umożliwijący czytanie plików CSV
+ * @author Sylwester Pijanowski
+ * @version 1.10
+ * @date 01.08.2014
+ */
+
 class Csv_File
 {
    private String nazwa;
