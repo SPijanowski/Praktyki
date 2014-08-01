@@ -3,7 +3,7 @@ package csv_reader;
 class Csv_File
 {
    private String nazwa;
-   private String separator;
+   private static String separator;
    private static String csvFilePath;
 
    public Csv_File(String n, String s)
@@ -20,7 +20,7 @@ class Csv_File
       return nazwa;
    }
 
-   public String getSeparator()
+   public static String getSeparator()
    {
       return separator;
    }
@@ -33,7 +33,7 @@ class Csv_File
       nazwa = n;
    }
 
-   public void setSeparator(String s)
+   public static void setSeparator(String s)
    {
       separator = s;
    }

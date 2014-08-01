@@ -10,15 +10,18 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.swing.*;
 
 import com.csvreader.CsvReader;
 
 
-public class CsvFrame extends JFrame
+public class CsvFrame extends JFrame implements Serializable
 {
-	   public static final int TEXT_ROWS = 20;
+
+	private static final long serialVersionUID = 2537576951291269546L;
+	public static final int TEXT_ROWS = 20;
 	   public static final int TEXT_COLUMNS = 40;
 	   private CsvChooser dialog = null;
 	   private JTextArea csvInsert;
@@ -75,7 +78,7 @@ public class CsvFrame extends JFrame
 	         {
 	            // Pobranie danych użytkownika w przypadku zatwierdzenia
 	        	 try {
-	     			String a = ";";
+	     			String a = Csv_File.getSeparator();
 	     			char b = a.charAt(0);
 	     			CsvReader tabela = new CsvReader(Csv_File.getScvFilePath(), b);
 	     					
