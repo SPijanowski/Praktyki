@@ -22,6 +22,7 @@ import org.apache.commons.validator.UrlValidator;
 
 import com.csvreader.CsvWriter;
 
+@SuppressWarnings("deprecation")
 public class Uzupelnianie_danych {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -102,6 +103,7 @@ class CsvFrame extends JFrame implements Serializable {
 		JButton insertButton = new JButton("Wstaw");
 		southPanel.add(insertButton);
 		insertButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent event) {
 
 				/**
