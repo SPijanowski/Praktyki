@@ -1,11 +1,12 @@
 Wstęp
 Program umożliwiający wprowadzanie danych(nazwy, ulicy, email, adres www, tel, NIP) firm do pliku CSV
-wersja 1.2 z dnia 31.07.2014
+wersja 1.21 z dnia 01.08.2014
 
 Nowości (W porównaniu z wersją 1.1)
 
 Należy zawsze podawać Nazwe oraz NIP
 Wprowadzono wlidacje NIP; Musi być cyfrą z przedziału[0-9] oraz zawierać maksymalnie 10 znaków
+Nie jest wymagany e-mail do wprowadzania danych
 
 Instalacja
 Należy mieć zainstalowane środowisko uruchomieniowe JAVY

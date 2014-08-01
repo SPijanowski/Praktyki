@@ -2,8 +2,8 @@ package csv_writer;
 
 /**
  * Program umożliwijacy wprowadzanie danych do pliku CSV
- * @date 31.07.2014
- * @version 1.2
+ * @date 01.08.2014
+ * @version 1.21
  * @author Sylwester Pijanowski
  */
 
@@ -104,11 +104,36 @@ class CsvFrame extends JFrame implements Serializable {
 		insertButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 
+				/**
+				 * Sprawdzenie poprawności e-maila
+				 */
+				String wprowadzanyMail = email.getText();
+				// źródło:
+				// http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
+				Pattern p = Pattern
+						.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+								+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+				Matcher m = p.matcher(wprowadzanyMail);
+
+				boolean walidacja = m.matches();
+				// źródło: http://www.csvreader.com/java_csv_samples.php
+				if (walidacja) {
+					return;
+				} else {
+					view.setForeground(Color.RED);
+					view.append("\r\nZły adres email. Poprawna forma np.(przyklad@email.com)");
+				}
+
 				Pattern pni = Pattern.compile("[0-9]{0,10}$");
 				Matcher m2 = pni.matcher(nip.getText());
 				boolean walidacjaNip = m2.matches();
 				if (!(nazwa.getText().length() == 0)
 						&& !(nip.getText().length() == 0) && walidacjaNip) {
+
+					/**
+					 * W razie potrzebydodanie protokołu oraz sprawdzenie
+					 * poprawności adresu www
+					 */
 					StringBuilder aUrl = new StringBuilder(url.getText());
 					String tmp = aUrl.substring(0, 7);
 					String adresWWW;
@@ -122,17 +147,11 @@ class CsvFrame extends JFrame implements Serializable {
 					String[] schemes = { "http", "https" };
 					UrlValidator urlValidator = new UrlValidator(schemes);
 					if (urlValidator.isValid(adresWWW)) {
-						String wprowadzanyMail = email.getText();
-						// źródło:
-						// http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
-						Pattern p = Pattern
-								.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-										+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-						Matcher m = p.matcher(wprowadzanyMail);
-
-						boolean walidacja = m.matches();
-						// �r�d�o: http://www.csvreader.com/java_csv_samples.php
-						if (walidacja) {
+						{
+							/**
+							 * Sprawdzanie czy istnieje plik csv W razie
+							 * potrzeby tworzy nowy
+							 */
 							boolean alreadyExists = new File(outputFile)
 									.exists();
 							try {
@@ -164,9 +183,6 @@ class CsvFrame extends JFrame implements Serializable {
 									+ ulica.getText() + ";" + email.getText()
 									+ ";" + adresWWW + ";" + tel.getText()
 									+ ";" + nip.getText());
-						} else {
-							view.setForeground(Color.RED);
-							view.append("\r\nZły adres email. Poprawna forma np.(przyklad@email.com)");
 						}
 					} else {
 						view.setForeground(Color.RED);
