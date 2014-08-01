@@ -8,7 +8,9 @@ package csv_reader;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -71,39 +73,56 @@ public class CsvFrame extends JFrame implements Serializable
 	         if (dialog == null) dialog = new CsvChooser();
 
 	         // Ustawianie wartości domyślnych
-	         dialog.setUser(new Csv_File("Nazwa Pliku", ";"));
+	         dialog.setCsvFile(new Csv_File("Nazwa Pliku", ";"));
 
 	         // Wyświetlenie okna dialogowego
-	         if (dialog.showDialog(CsvFrame.this, "Connect"))
+	         if (dialog.showDialog(CsvFrame.this, "Wybier Plik"))
 	         {
 	            // Pobranie danych użytkownika w przypadku zatwierdzenia
-	        	 try {
-	     			String a = Csv_File.getSeparator();
+	        	 	String a = Csv_File.getSeparator();
 	     			char b = a.charAt(0);
-	     			CsvReader tabela = new CsvReader(Csv_File.getScvFilePath(), b);
-	     					
-	     			tabela.readHeaders();
+	     			try {
+						CsvReader tabela = new CsvReader(Csv_File.getScvFilePath(), b);
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+	     			BufferedReader CSVFile = null;
+					try {
+						CSVFile = new BufferedReader(new FileReader(Csv_File.getScvFilePath()));
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
-	     			while (tabela.readRecord())
-	     			{
-	     				String productID = tabela.get("Nazwa");
-	     				String productName = tabela.get("Ulica");
-	     				String supplierID = tabela.get("E-mail");
-	     				String categoryID = tabela.get("Strona WWW");
-	     				String quantityPerUnit = tabela.get("Telefon");
-	     				String unitPrice = tabela.get("Nip");
-	     								
-	     				// perform program logic here
-	     				csvInsert.append(productID+";"+productName+"\r\n");
+	     			  String dataRow = null;
+	     			try {
+	     				dataRow = CSVFile.readLine();
+	     			} catch (IOException e) {
+	     				// TODO Auto-generated catch block
+	     				e.printStackTrace();
+	     			} 
+
+	     			  while (dataRow != null){
+	     			   String[] dataArray = dataRow.split("b");
+	     			   for (String item:dataArray) { 
+	     				  csvInsert.append(item + "\t" + "\r\n"); 
+	     			   }
+	     			  
+	     			   try {
+	     				dataRow = CSVFile.readLine();
+	     			} catch (IOException e) {
+	     				
+	     				e.printStackTrace();
+	     			} 
+	     			  }
+	     			 
+	     			  try {
+	     				CSVFile.close();
+	     			} catch (IOException e) {
+	     				
+	     				e.printStackTrace();
 	     			}
-	     	
-	     			tabela.close();
-	     			
-	     		} catch (FileNotFoundException e) {
-	     			e.printStackTrace();
-	     		} catch (IOException e) {
-	     			e.printStackTrace();
-	     		}
 	        	 Csv_File u = dialog.getCsvFile();
 	            csvInsert.append("nazwa użytkownika = " + u.getNazwa() + ", hasło = "
 	                  + (new String(u.getSeparator())) + "\r\n");

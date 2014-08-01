@@ -90,8 +90,8 @@ public class CsvChooser extends JPanel implements Serializable {
 	 * @param u
 	 *            domyślne informacje użytkownika
 	 */
-	public void setUser(Csv_File u) {
-		nazwa.setText(u.getNazwa());
+	public void setCsvFile(Csv_File f) {
+		nazwa.setText(f.getNazwa());
 	}
 
 	/**
