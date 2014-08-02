@@ -8,11 +8,17 @@ package csv_reader;
  */
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.Serializable;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.csvreader.CsvReader;
 
 public class CsvChooser extends JPanel implements Serializable {
 
@@ -26,7 +32,10 @@ public class CsvChooser extends JPanel implements Serializable {
 	private JFileChooser csvFileChooser;
 	private JButton wybierz;
 	private JComboBox separator;
+	private static String[] dataArray = {""};
+	private int countRow = 0;
 
+	
 	public CsvChooser() {
 
 		wybierz = new JButton("Wybierz");
@@ -153,13 +162,82 @@ public class CsvChooser extends JPanel implements Serializable {
 	}
 
 	private class fileOpenListener implements ActionListener {
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public void actionPerformed(ActionEvent event) {
 			csvFileChooser.setCurrentDirectory(new File("."));
 			int result = csvFileChooser.showOpenDialog(CsvChooser.this);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				String csvFilePath = csvFileChooser.getSelectedFile().getPath();
 				Csv_File.setCsvFilePath(csvFilePath);
+				BufferedReader CSVFile = null;
+				try {
+					CSVFile = new BufferedReader(new FileReader(csvFilePath));
+				} catch (FileNotFoundException e2) {
+					e2.printStackTrace();
+				}
+				String dataRow = null;
+				try {
+					dataRow = CSVFile.readLine();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} 		
+					
+					setDataArray(dataRow.split(";"));
+					
+					StringBuilder c = new StringBuilder();
+					for (String item : getDataArray()) {
+						for(int i = 0; i < 1; i++)	{
+						
+						c.append("String"+" a"+i+item+" = tabela.get(\""+item+"\");\r\n");
+					}
+					try {
+						CSVFile.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					}
+					
+					try {
+						String a = ";";
+						char b = a.charAt(0);
+						CsvReader tabela = new CsvReader(csvFilePath, b);
+								
+						tabela.readHeaders();
+						
+						
+						while (tabela.readRecord())
+						{	
+							countRow++;
+							for(int i = 0; i<=dataArray.length-1; i++)
+								System.out.print(tabela.get(dataArray[i])+";");
+												
+						}
+						tabela.close();
+						
+						
+						
+						
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					Csv_Table.setRow(countRow-1);
+					JList abcd = new JList(getDataArray());
+					JComboBox poletko = new JComboBox(getDataArray());
+					JScrollPane scroll = new JScrollPane(abcd);
+				    add(poletko, BorderLayout.NORTH);
+					}
 			}
 		}
+
+	public static String[] getDataArray() {
+		
+		return dataArray;
+	}
+
+	public static void setDataArray(String[] split) {
+		dataArray = split;
+		
 	}
 }

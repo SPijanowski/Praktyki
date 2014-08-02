@@ -10,7 +10,7 @@ package csv_reader;
 class Csv_File
 {
    private String nazwa;
-   private static String separator;
+   private static String separator = ";";
    private static String csvFilePath;
 
    public Csv_File(String n, String s)

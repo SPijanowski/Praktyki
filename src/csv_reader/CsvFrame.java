@@ -68,8 +68,7 @@ public class CsvFrame extends JFrame implements Serializable {
 				dialog = new CsvChooser();
 
 			// Ustawianie wartości domyślnych
-			dialog.setCsvFile(new Csv_File("Nazwa Pliku", ";"));
-
+			
 			// Wyświetlenie okna dialogowego
 			if (dialog.showDialog(CsvFrame.this, "Wybier Plik")) {
 				// Pobranie danych użytkownika w przypadku zatwierdzenia
@@ -119,8 +118,13 @@ public class CsvFrame extends JFrame implements Serializable {
 
 					e.printStackTrace();
 				}
-				Csv_File u = dialog.getCsvFile();
-				csvInsert.append("GOTOWE!");
+				
+				
+				Csv_Table wczytane = new Csv_Table(Csv_Table.getRow(), 0, CsvChooser.getDataArray().length);
+				JTable model = new JTable(wczytane);
+				JScrollPane scrollPane = new JScrollPane(model);
+				csvInsert.append("GOTOWE! Wczytano +"+Csv_Table.getRow());
+				add(scrollPane, BorderLayout.SOUTH);
 			}
 		}
 	}
