@@ -58,12 +58,12 @@ public class CsvChooser extends JPanel implements Serializable {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(3, 2));
+		panel.add(new JLabel("Separator:"));
+		panel.add(separator);
 		panel.add(new JLabel("Wybierz Plik:"));
 		panel.add(wybierz);
 		panel.add(new JLabel("Plik Nazwa:"));
-		panel.add(nazwa = new JTextField(""));
-		panel.add(new JLabel("Separator:"));
-		panel.add(separator);
+		panel.add(nazwa = new JTextField(""));		
 		add(panel, BorderLayout.CENTER);
 
 		// Utworzenie przycisków OK i Anuluj, które zamykają okno dialogowe
@@ -182,7 +182,7 @@ public class CsvChooser extends JPanel implements Serializable {
 					e1.printStackTrace();
 				} 		
 					
-					setDataArray(dataRow.split(";"));
+					setDataArray(dataRow.split(Csv_File.getSeparator()));
 					
 					StringBuilder c = new StringBuilder();
 					for (String item : getDataArray()) {
@@ -198,7 +198,7 @@ public class CsvChooser extends JPanel implements Serializable {
 					}
 					
 					try {
-						String a = ";";
+						String a = Csv_File.getSeparator();
 						char b = a.charAt(0);
 						CsvReader tabela = new CsvReader(csvFilePath, b);
 								

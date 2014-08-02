@@ -125,11 +125,10 @@ public class CsvFrame extends JFrame implements Serializable {
 				Csv_Table wczytane = new Csv_Table(Csv_Table.getRow(), 0, CsvChooser.getDataArray().length);
 				JTable model = new JTable(wczytane);
 				String[] a22 = CsvChooser.getDataArray();
-				String[][] a222 ={{"one",   "1", "two",   "2","three", "3"},
-								  {"one",   "1", "two",   "2","three", "3"},
-					   	{"one",   "1", "two",   "2","three", "3"},
-						{"one",   "1", "two",   "2","three", "3"},
-						{"one",   "1", "two",   "2","three", "3"},
+				String[][] a222 ={{"one",   "1", "two",   "2","three", "3",   "1", "two",   "2","three", "3",   "1", "two",   "2","three", "3"},
+						{"one",   "1", "two",   "2","three", "3",   "1", "two",   "2","three", "3",   "1", "two",   "2","three", "3"},
+						{"one",   "1", "two",   "2","three", "3",   "1", "two",   "2","three", "3",   "1", "two",   "2","three", "3"},
+						{"one",   "1", "two",   "2","three", "3",   "1", "two",   "2","three", "3",   "1", "two",   "2","three", "3"},
 					     };
 				JTable wsd = new JTable(a222, a22);
 			
