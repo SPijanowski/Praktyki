@@ -35,11 +35,11 @@ public class Csv_Table extends AbstractTableModel{
 	@Override
 	public Object getValueAt(int r, int c) {
 		String[] a = CsvChooser.getDataArray();
-		StringBuilder b = new StringBuilder();
-		for(Object nowy : a)
-			return b.append(nowy);
-		
+		StringBuilder b = new StringBuilder(a[getColumnCount()-1]);
+		for(int i = 0; i>a.length; i++ )
+		  b.append(i);
 		return b;
 	}	
+
 }
 

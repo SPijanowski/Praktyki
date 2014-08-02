@@ -10,10 +10,12 @@ package csv_reader;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Scanner;
 
 import javax.swing.*;
 
@@ -122,7 +124,16 @@ public class CsvFrame extends JFrame implements Serializable {
 				
 				Csv_Table wczytane = new Csv_Table(Csv_Table.getRow(), 0, CsvChooser.getDataArray().length);
 				JTable model = new JTable(wczytane);
-				JScrollPane scrollPane = new JScrollPane(model);
+				String[] a22 = CsvChooser.getDataArray();
+				String[][] a222 ={{"one",   "1", "two",   "2","three", "3"},
+								  {"one",   "1", "two",   "2","three", "3"},
+					   	{"one",   "1", "two",   "2","three", "3"},
+						{"one",   "1", "two",   "2","three", "3"},
+						{"one",   "1", "two",   "2","three", "3"},
+					     };
+				JTable wsd = new JTable(a222, a22);
+			
+				JScrollPane scrollPane = new JScrollPane(wsd);
 				csvInsert.append("GOTOWE! Wczytano +"+Csv_Table.getRow());
 				add(scrollPane, BorderLayout.SOUTH);
 			}
