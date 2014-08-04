@@ -14,20 +14,26 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 public class CsvFrame extends JFrame implements Serializable {
 
 	private static final long serialVersionUID = 2537576951291269546L;
-	public static final int TEXT_ROWS = 20;
-	public static final int TEXT_COLUMNS = 40;
+	public static final int TEXT_ROWS = 5;
+	public static final int TEXT_COLUMNS = 90;
+	public static JMenuBar mBar;
 	private CsvChooser dialog = null;
 	private JTextArea csvInsert;
+	private JPanel northPanel = new JPanel();
+	 private ArrayList<TableColumn> removedColumns;
 
 	public CsvFrame() {
 		// Tworzenie menu Plik
-
+		
 		JMenuBar mbar = new JMenuBar();
 		setJMenuBar(mbar);
 		JMenu insertMenu = new JMenu("Wczytaj Plik");
@@ -50,14 +56,19 @@ public class CsvFrame extends JFrame implements Serializable {
 		insertMenu.add(exitItem);
 
 		csvInsert = new JTextArea(TEXT_ROWS, TEXT_COLUMNS);
-		add(new JScrollPane(csvInsert), BorderLayout.NORTH);
-		pack();
+		csvInsert.setEditable(false);
+		JScrollPane scroll = new JScrollPane(csvInsert);
+		northPanel.add(scroll);
+		add(northPanel, BorderLayout.SOUTH);
+		
 	}
 
 
 
 	private class ConnectAction implements ActionListener {
 		private JButton generuj;
+		private JTable model;
+
 
 		public void actionPerformed(ActionEvent event) {
 		
@@ -89,11 +100,8 @@ public class CsvFrame extends JFrame implements Serializable {
 
 				while (dataRow != null) {
 					String[] dataArray = dataRow.split(a);
-					for (String item : dataArray) {
-						csvInsert.append(item + ";");
-
-					}
-					csvInsert.append("\r\n");
+					
+					
 					try {
 						dataRow = CSVFile.readLine();
 					} catch (IOException e) {
@@ -108,14 +116,15 @@ public class CsvFrame extends JFrame implements Serializable {
 
 					e.printStackTrace();
 				}
-
-				csvInsert.append("GOTOWE! Wczytano + " + Csv_Table.getRow());
+				csvInsert.setForeground(Color.GREEN);
+				csvInsert.append("GOTOWE! Wczytano " + Csv_Table.getRow()+" Rekordów\r\n");
 
 			}
 			generuj = new JButton("Generuj Tabele");
 			generuj.addActionListener(new ActionListener() {
-
+				
 				public void actionPerformed(ActionEvent event) {
+					 
 					int line_number = 0;
 					int line_number1 = 0;
 
@@ -182,17 +191,121 @@ public class CsvFrame extends JFrame implements Serializable {
 					} catch (IOException e) {
 					}
 
-					JTable model = new JTable(tablicaDanych, CsvChooser
+					final JTable model = new JTable(tablicaDanych, CsvChooser
 							.getDataArray());
 					JScrollPane scrollPane = new JScrollPane(model);
 					add(scrollPane, BorderLayout.CENTER);
-					SwingUtilities.updateComponentTreeUI(Csv_Reader.frame);
-
 					generuj.setVisible(false);
+					JToolBar bar = new JToolBar();
+					String[] b = CsvChooser.getDataArray();
+					
+					
+					
+					int i =0;
+					for(i = 0; i<b.length; i++)	{				
+					JCheckBox kolumna = new JCheckBox(b[i], true);
+					bar.add(kolumna);}
+					add(bar, BorderLayout.NORTH);
+					removedColumns = new ArrayList<TableColumn>();
+					 JPopupMenu popup = new JPopupMenu();
+
+				      JMenu selectionMenu = new JMenu("Obszar Zaznaczenia");
+				      
+
+				      final JCheckBoxMenuItem rowsItem = new JCheckBoxMenuItem("Wiersze");
+				      final JCheckBoxMenuItem columnsItem = new JCheckBoxMenuItem("Kolumny");
+				      final JCheckBoxMenuItem cellsItem = new JCheckBoxMenuItem("Komórki");
+
+				      rowsItem.setSelected(model.getRowSelectionAllowed());
+				      columnsItem.setSelected(model.getColumnSelectionAllowed());
+				      cellsItem.setSelected(model.getCellSelectionEnabled());
+
+				      rowsItem.addActionListener(new ActionListener()
+				      {
+				         public void actionPerformed(ActionEvent event)
+				         {
+				            model.clearSelection();
+				            model.setRowSelectionAllowed(rowsItem.isSelected());
+				            cellsItem.setSelected(model.getCellSelectionEnabled());
+				         }
+				      });
+				      selectionMenu.add(rowsItem);
+				     
+				      columnsItem.addActionListener(new ActionListener()
+				      {
+				         public void actionPerformed(ActionEvent event)
+				         {
+				            model.clearSelection();
+				            model.setColumnSelectionAllowed(columnsItem.isSelected());
+				            cellsItem.setSelected(model.getCellSelectionEnabled());
+				         }
+				      });
+				      selectionMenu.add(columnsItem);
+				      
+				      cellsItem.addActionListener(new ActionListener()
+				      {
+				         public void actionPerformed(ActionEvent event)
+				         {
+				            model.clearSelection();
+				            model.setCellSelectionEnabled(cellsItem.isSelected());
+				            rowsItem.setSelected(model.getRowSelectionAllowed());
+				            columnsItem.setSelected(model.getColumnSelectionAllowed());
+				         }
+				      });
+				      selectionMenu.add(cellsItem);
+				      popup.add(selectionMenu);
+				      
+				      model.setComponentPopupMenu(popup);
+				      csvInsert.setComponentPopupMenu(popup);
+				      JMenu tableMenu = new JMenu("Edycja");
+				      
+
+				      JMenuItem hideColumnsItem = new JMenuItem("Ukryj Kolumny");
+				      hideColumnsItem.addActionListener(new ActionListener()
+				      {
+				         public void actionPerformed(ActionEvent event)
+				         {
+				            int[] selected = model.getSelectedColumns();
+				            TableColumnModel columnModel = model.getColumnModel();
+
+				            // usuwa kolumny z widoku tabeli, począwszy od
+				            // najwyższego indeksu, aby nie zmieniać numerów kolumn
+
+				            for (int i = selected.length - 1; i >= 0; i--)
+				            {
+				               TableColumn column = columnModel.getColumn(selected[i]);
+				               model.removeColumn(column);
+
+				               // przechowuje ukryte kolumny do ponownej prezentacji
+
+				               removedColumns.add(column);
+				            }
+				         }
+				      });
+				      tableMenu.add(hideColumnsItem);
+
+				      JMenuItem showColumnsItem = new JMenuItem("Pokaż Ukryte Kolumny");
+				      showColumnsItem.addActionListener(new ActionListener()
+				      {
+				         public void actionPerformed(ActionEvent event)
+				         {
+				            // przywraca wszystkie usunięte kolumny
+				            for (TableColumn tc : removedColumns)
+				               model.addColumn(tc);
+				            removedColumns.clear();
+				         }
+				      });
+				      tableMenu.add(showColumnsItem);
+				      popup.add(tableMenu);
+				      
+				      SwingUtilities.updateComponentTreeUI(Csv_Reader.frame);
+					
+					
 					
 				}
 			});
-			add(generuj, BorderLayout.SOUTH);
+			add(generuj, BorderLayout.NORTH);
+			 
 		}
 	}
 }

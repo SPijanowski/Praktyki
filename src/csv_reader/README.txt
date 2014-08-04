@@ -1,8 +1,12 @@
 Wstęp
 Program umożliwiający czytanie plików CSV
-Wersja 1.20 z dnia 04.08.2014
-Nowości w porównaniu z wersją 1.10
-Możliwość generowania tabeli
+Wersja 1.21 z dnia 04.08.2014
+
+Nowości w porównaniu z wersją 1.20
+Możliwość wymierania spoobu zaznaczenia danych w tabeli
+Możliwość ukrywania i pokazywania danych.
+Źródło kodu na edycje tabeli
+Core Java Techniki zaawansowane wydanie VIII wydawnictwo Helion
 
 Instalacja 
 Należy mieć zainstalowane środowisko uruchomieniowe JAVY
@@ -21,3 +25,5 @@ wszystkie dane zawarte w pliku. A na końcu pojawi sie napis "GOTOWE!".
 Następnie urzytkownik może wygenerować tabele zawierającą orginalne dane z pliku.
 
 Informacje dodatkowe
+Aplikacja opiera sie na kodie awartym w książce:
+Core Java Techniki zaawansowane wydanie VIII wydawnictwo Helion

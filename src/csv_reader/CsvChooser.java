@@ -163,6 +163,8 @@ public class CsvChooser extends JPanel implements Serializable {
 	private class fileOpenListener implements ActionListener {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public void actionPerformed(ActionEvent event) {
+			setDataArray(null);
+			countRow = 0;
 			csvFileChooser.setCurrentDirectory(new File("."));
 			int result = csvFileChooser.showOpenDialog(CsvChooser.this);
 			if (result == JFileChooser.APPROVE_OPTION) {
