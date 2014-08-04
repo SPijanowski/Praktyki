@@ -14,7 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -25,6 +24,7 @@ import com.csvreader.CsvReader;
 public class CsvChooser extends JPanel implements Serializable {
 	
 	public static String[][] wczytaneDane;
+
 	private static final long serialVersionUID = 5054426769966312408L;
 
 	private JTextField nazwa;
@@ -34,15 +34,18 @@ public class CsvChooser extends JPanel implements Serializable {
 	private JDialog dialog;
 	private JFileChooser csvFileChooser;
 	private JButton wybierz;
+	@SuppressWarnings("rawtypes")
 	private JComboBox separator;
 	private static String[] dataArray = {""};
 	private int countRow = 0;
-	private String[][] tmpDanych;
+	private JPanel panel = new JPanel();
+	
 	
 
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public CsvChooser() {
-
+		setSize(100,600);
 		wybierz = new JButton("Wybierz");
 		wybierz.addActionListener(new fileOpenListener());
 		separator = new JComboBox();
@@ -60,15 +63,14 @@ public class CsvChooser extends JPanel implements Serializable {
 		setLayout(new BorderLayout());
 
 		// Utworzenie panelu z polami nazwy użytkownika i hasła
-
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(3, 2));
+		
+		
+		panel.setLayout(new GridLayout(4, 2));
 		panel.add(new JLabel("Separator:"));
 		panel.add(separator);
 		panel.add(new JLabel("Wybierz Plik:"));
 		panel.add(wybierz);
-		panel.add(new JLabel("Plik Nazwa:"));
-		panel.add(nazwa = new JTextField(""));		
+		
 		add(panel, BorderLayout.CENTER);
 
 		// Utworzenie przycisków OK i Anuluj, które zamykają okno dialogowe
@@ -214,7 +216,8 @@ public class CsvChooser extends JPanel implements Serializable {
 					JList abcd = new JList(getDataArray());					
 					JComboBox poletko = new JComboBox(getDataArray());
 					JScrollPane scroll = new JScrollPane(abcd);
-				    add(poletko, BorderLayout.NORTH);
+					add(poletko, BorderLayout.NORTH);
+					
 				    SwingUtilities.updateComponentTreeUI(dialog);
 					
 				    
