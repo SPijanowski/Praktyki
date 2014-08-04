@@ -1,9 +1,11 @@
 package csv_reader;
-
-import javax.swing.table.AbstractTableModel;
-
-public class Csv_Table extends AbstractTableModel{
-	private static final StringBuilder csvInsert = null;
+/**
+ * Program umożliwijący czytanie plików CSV
+ * @author Sylwester Pijanowski
+ * @version 1.20
+ * @date 04.08.2014
+ */
+public class Csv_Table {
 	public static int row;
 	public int minColum;
 	public int maxColum;
@@ -21,25 +23,6 @@ public class Csv_Table extends AbstractTableModel{
 	public static void setRow(int r){
 		row = r;
 	}
-		
-	@Override
-	public int getColumnCount() {
-		
-		return maxColum - minColum;
-	}
-	@Override
-	public int getRowCount() {
-		
-		return row;
-	}
-	@Override
-	public Object getValueAt(int r, int c) {
-		String[] a = CsvChooser.getDataArray();
-		StringBuilder b = new StringBuilder(a[getColumnCount()-1]);
-		for(int i = 0; i>a.length; i++ )
-		  b.append(i);
-		return b;
-	}	
 
 }
 

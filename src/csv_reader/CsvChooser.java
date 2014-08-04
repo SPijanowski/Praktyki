@@ -3,8 +3,8 @@ package csv_reader;
 /**
  * Program umożliwijący czytanie plików CSV
  * @author Sylwester Pijanowski
- * @version 1.10
- * @date 01.08.2014
+ * @version 1.20
+ * @date 04.08.2014
  */
 import java.awt.*;
 import java.awt.event.*;
@@ -14,14 +14,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.csvreader.CsvReader;
 
-public class CsvChooser extends JPanel implements Serializable {
 
+public class CsvChooser extends JPanel implements Serializable {
+	
+	public static String[][] wczytaneDane;
 	private static final long serialVersionUID = 5054426769966312408L;
 
 	private JTextField nazwa;
@@ -34,6 +37,8 @@ public class CsvChooser extends JPanel implements Serializable {
 	private JComboBox separator;
 	private static String[] dataArray = {""};
 	private int countRow = 0;
+	private String[][] tmpDanych;
+	
 
 	
 	public CsvChooser() {
@@ -73,6 +78,8 @@ public class CsvChooser extends JPanel implements Serializable {
 			public void actionPerformed(ActionEvent event) {
 				ok = true;
 				dialog.setVisible(false);
+				SwingUtilities.updateComponentTreeUI(Csv_Reader.frame);
+				
 			}
 		});
 
@@ -99,22 +106,12 @@ public class CsvChooser extends JPanel implements Serializable {
 
 	}
 
-	/**
-	 * Ustawia wartości domyślne okna dialogowego
-	 * 
-	 * @param u
-	 *            domyślne informacje użytkownika
-	 */
+
 	public void setCsvFile(Csv_File f) {
 		nazwa.setText(f.getNazwa());
 	}
 
-	/**
-	 * Pobiera dane podane w oknie dialogowym
-	 * 
-	 * @return a obiekt typu User, którego stan reprezentuje dane wprowadzone w
-	 *         oknie dialogowym
-	 */
+
 	public Csv_File getCsvFile() {
 		return new Csv_File(nazwa.getText(), (String) separator.getSelectedItem());
 	}
@@ -184,12 +181,8 @@ public class CsvChooser extends JPanel implements Serializable {
 					
 					setDataArray(dataRow.split(Csv_File.getSeparator()));
 					
-					StringBuilder c = new StringBuilder();
-					for (String item : getDataArray()) {
-						for(int i = 0; i < 1; i++)	{
+					{
 						
-						c.append("String"+" a"+i+item+" = tabela.get(\""+item+"\");\r\n");
-					}
 					try {
 						CSVFile.close();
 					} catch (IOException e) {
@@ -208,25 +201,23 @@ public class CsvChooser extends JPanel implements Serializable {
 						while (tabela.readRecord())
 						{	
 							countRow++;
-							for(int i = 0; i<=dataArray.length-1; i++)
-								System.out.print(tabela.get(dataArray[i])+";");
-												
+
 						}
-						tabela.close();
 						
-						
-						
-						
+					tabela.close();
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 					Csv_Table.setRow(countRow-1);
-					JList abcd = new JList(getDataArray());
+					JList abcd = new JList(getDataArray());					
 					JComboBox poletko = new JComboBox(getDataArray());
 					JScrollPane scroll = new JScrollPane(abcd);
 				    add(poletko, BorderLayout.NORTH);
+				    SwingUtilities.updateComponentTreeUI(dialog);
+					
+				    
 					}
 			}
 		}
@@ -234,6 +225,14 @@ public class CsvChooser extends JPanel implements Serializable {
 	public static String[] getDataArray() {
 		
 		return dataArray;
+	}
+
+	public void setWczytaneDane(String[][] a) {
+		wczytaneDane = a;
+		
+	}
+	public static String[][] getWczytaneDane(){
+		return wczytaneDane;
 	}
 
 	public static void setDataArray(String[] split) {
