@@ -41,7 +41,9 @@ public class CsvChooser extends JPanel implements Serializable {
 	private static String[] dataArray = {""};
 	private int countRow = 0;
 	private JPanel panel = new JPanel();
+	private JPanel northPanel = new JPanel();
 	public static String[] selected;
+
 	
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -152,6 +154,9 @@ public class CsvChooser extends JPanel implements Serializable {
 	private class fileOpenListener implements ActionListener {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public void actionPerformed(ActionEvent event) {
+			northPanel.removeAll();
+			northPanel.updateUI();
+			setSelected(null);
 			setDataArray(null);
 			countRow = 0;
 			csvFileChooser.setCurrentDirectory(new File("."));
@@ -224,11 +229,12 @@ public class CsvChooser extends JPanel implements Serializable {
 							
 						
 					JScrollPane scroll = new JScrollPane(abcd);
-					add(scroll, BorderLayout.NORTH);
 					
+					northPanel.add(scroll);
+					
+					add(northPanel, BorderLayout.NORTH);
+					SwingUtilities.updateComponentTreeUI(northPanel);
 				    SwingUtilities.updateComponentTreeUI(dialog);
-					
-				    
 					}
 			}
 		}

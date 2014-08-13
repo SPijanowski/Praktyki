@@ -1,10 +1,11 @@
 Wstęp
 Program umożliwiający czytanie plików CSV
-Wersja 1.30 z dnia 12.08.2014
+Wersja 1.40 z dnia 12.08.2014
 
 Nowości w porównaniu z wersją 1.20
 Automatycznie wykrywa separator danych;
 Możliwość wyboru wczytywanych danych;
+Poprawiono wygląd tabeli;
 
 Źródło kodu na edycje tabeli
 Core Java Techniki zaawansowane wydanie VIII wydawnictwo Helion
@@ -19,6 +20,8 @@ Aby zacząć pracować należy wejść do menu "Wczytaj plik" i następnie wybra
 W oknie dialogowym należy nacisnąć przycisk wybierz i wybrać wymagany plik.
 
 Po dokonaniu wyboru pliku mamy możliwość wczytania wymaganych danych.
+Aby wybrać kilka danych należy przytrzymać lewy przycisk myszki oraz przycisk na klawiaturze "ctrl";
+(lewy myszka + ctrl);
 Jeśli użytkownik nie dokona wyboru , wczytany zostanie cały plik.
 
 Po dokonaniu wyboru zostaniemy przeniesieni do okienka powitalnego. 
@@ -36,3 +39,6 @@ Dostępne są następujące opcje:
 Informacje dodatkowe
 Aplikacja opiera sie na kodzie zawartym w książce:
 Core Java Techniki zaawansowane wydanie VIII wydawnictwo Helion
+
+Numerowanie wierszy i kolor wierszy
+Źródło: http://xis.schowek.net/2009/03/11/upiekszanie-jtable/

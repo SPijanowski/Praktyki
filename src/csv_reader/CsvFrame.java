@@ -73,8 +73,7 @@ public class CsvFrame extends JFrame implements Serializable {
 
 
 		public void actionPerformed(ActionEvent event) {
-		
-		
+			
 			if (dialog == null)
 				dialog = new CsvChooser();
 				dialog.setSize(400, 400);
@@ -118,15 +117,17 @@ public class CsvFrame extends JFrame implements Serializable {
 
 					e.printStackTrace();
 				}
-				csvInsert.setForeground(Color.GREEN);
-				csvInsert.append("GOTOWE! Wczytano " + Csv_Table.getRow()+" Rekordów\r\n");
+				csvInsert.setForeground(new Color(0,100,0));
+				int wczyt = Csv_Table.getRow() +1;
+				csvInsert.append("GOTOWE! Wczytano " + wczyt+" Rekordów\r\n");
 
 			}
 			generuj = new JButton("Generuj Tabele");
 			generuj.addActionListener(new ActionListener() {
 				
+		
 				public void actionPerformed(ActionEvent event) {
-					 
+					
 					int line_number = 0;
 					int line_number1 = 0;
 					String l = null;
@@ -175,9 +176,15 @@ public class CsvFrame extends JFrame implements Serializable {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-
+					
+					
+					
+					
+					
 					final JTable model = new JTable(tablicaDanych, test);
+					model.setDefaultRenderer( Object.class, new ColorCellRenderer() );
 					JScrollPane scrollPane = new JScrollPane(model);
+					scrollPane.setRowHeaderView( new LineNumberTable( model ) );
 					add(scrollPane, BorderLayout.CENTER);
 					generuj.setVisible(false);
 					/**JToolBar bar = new JToolBar();
