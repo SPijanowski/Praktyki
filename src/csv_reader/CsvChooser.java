@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.csvreader.CsvReader;
@@ -39,35 +41,22 @@ public class CsvChooser extends JPanel implements Serializable {
 	private static String[] dataArray = {""};
 	private int countRow = 0;
 	private JPanel panel = new JPanel();
-	
+	public static String[] selected;
 	
 
-	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public CsvChooser() {
 		setSize(100,600);
 		wybierz = new JButton("Wybierz");
 		wybierz.addActionListener(new fileOpenListener());
-		separator = new JComboBox();
-		separator.setEditable(false);
-		separator.addItem(";");
-		separator.addItem(",");
-		separator.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent event)
-			{	
-				String  se = (String) separator.getSelectedItem();
-				Csv_File.setSeparator(se);
-			}
-		});
+
 		setLayout(new BorderLayout());
 
 		// Utworzenie panelu z polami nazwy użytkownika i hasła
 		
 		
 		panel.setLayout(new GridLayout(4, 2));
-		panel.add(new JLabel("Separator:"));
-		panel.add(separator);
+
 		panel.add(new JLabel("Wybierz Plik:"));
 		panel.add(wybierz);
 		
@@ -170,6 +159,8 @@ public class CsvChooser extends JPanel implements Serializable {
 			if (result == JFileChooser.APPROVE_OPTION) {
 				String csvFilePath = csvFileChooser.getSelectedFile().getPath();
 				Csv_File.setCsvFilePath(csvFilePath);
+				//Wybór separatora
+				Csv_File.separation(csvFilePath);
 				BufferedReader CSVFile = null;
 				try {
 					CSVFile = new BufferedReader(new FileReader(csvFilePath));
@@ -215,10 +206,25 @@ public class CsvChooser extends JPanel implements Serializable {
 						e.printStackTrace();
 					}
 					Csv_Table.setRow(countRow-1);
-					JList abcd = new JList(getDataArray());					
-					JComboBox poletko = new JComboBox(getDataArray());
+					
+						String[] dane = getDataArray();
+						final JList abcd = new JList(dane);	
+						abcd.setVisibleRowCount(4);
+						
+						abcd.addListSelectionListener(new ListSelectionListener(){
+							public void valueChanged(ListSelectionEvent event)
+							{	
+								setSelected(null);
+								Object values[] = abcd.getSelectedValues();
+								int lenght = values.length;
+								selected = new String[lenght];
+								System.arraycopy(values, 0, selected, 0, lenght);		
+							}
+						});
+							
+						
 					JScrollPane scroll = new JScrollPane(abcd);
-					add(poletko, BorderLayout.NORTH);
+					add(scroll, BorderLayout.NORTH);
 					
 				    SwingUtilities.updateComponentTreeUI(dialog);
 					
@@ -243,5 +249,13 @@ public class CsvChooser extends JPanel implements Serializable {
 	public static void setDataArray(String[] split) {
 		dataArray = split;
 		
+	}
+	public static String[] getSelected() {
+		return selected;
+	}
+
+
+	public void setSelected(String[] s) {
+		selected = s;
 	}
 }

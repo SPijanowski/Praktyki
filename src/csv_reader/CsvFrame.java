@@ -20,6 +20,8 @@ import javax.swing.*;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import com.csvreader.CsvReader;
+
 public class CsvFrame extends JFrame implements Serializable {
 
 	private static final long serialVersionUID = 2537576951291269546L;
@@ -27,7 +29,7 @@ public class CsvFrame extends JFrame implements Serializable {
 	public static final int TEXT_COLUMNS = 90;
 	public static JMenuBar mBar;
 	private CsvChooser dialog = null;
-	private JTextArea csvInsert;
+	static JTextArea csvInsert;
 	private JPanel northPanel = new JPanel();
 	 private ArrayList<TableColumn> removedColumns;
 
@@ -127,77 +129,59 @@ public class CsvFrame extends JFrame implements Serializable {
 					 
 					int line_number = 0;
 					int line_number1 = 0;
-
-					String[] dataArray = {};
-					BufferedReader CSVFile = null;
-					try {
-						CSVFile = new BufferedReader(new FileReader(Csv_File
-								.getScvFilePath()));
-					} catch (FileNotFoundException e1) {
-
+					String l = null;
+					String[] test = null;
+					String a = Csv_File.getSeparator();
+					String path = Csv_File.getScvFilePath();
+					char sep = a.charAt(0);
+					String[] wybraane = CsvChooser.getSelected();
+					if( wybraane !=null)
+					{
+						test = wybraane;
 					}
-
-					String dataRow = "";
-					try {
-						dataRow = CSVFile.readLine();
-					} catch (IOException e) {
-
+					else{
+						test = CsvChooser.getDataArray();
 					}
-
-					while (dataRow != null) {
-						line_number++;
-						dataArray = dataRow.split(Csv_File.getSeparator());
-
-						try {
-							dataRow = CSVFile.readLine();
-
-						} catch (IOException e) {
-
+					try {
+						
+						
+						CsvReader tabela = new CsvReader(path, sep);
+						tabela.readHeaders();
+						while (tabela.readRecord()){
+							++line_number;
 						}
-					}
-
-					try {
-						CSVFile.close();
+						tabela.close();
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
 					} catch (IOException e) {
+						e.printStackTrace();
 					}
-					String[][] tablicaDanych = new String[line_number - 1][dataArray.length];
+					
+					String[][] tablicaDanych = new String[line_number][test.length];
 					try {
-						CSVFile = new BufferedReader(new FileReader(Csv_File
-								.getScvFilePath()));
-					} catch (FileNotFoundException e1) {
-					}
-					String separator = Csv_File.getSeparator();
-					String dataRow1 = "";
-					try {
-						dataRow1 = CSVFile.readLine();
-					} catch (IOException e) {
-					}
-					while (dataRow1 != null) {
-						line_number1++;
-						try {
-							dataRow1 = CSVFile.readLine();
-
-							if (dataRow1 != null) {
-								dataArray = dataRow1.split(separator);
-								for (int i = 0; i <= dataArray.length - 1; i++)
-									tablicaDanych[line_number1 - 1][i] = dataArray[i];
-							} else {
-							}
-						} catch (IOException e) {
+						CsvReader tabela = new CsvReader(path, sep);
+						tabela.readHeaders();
+						while (tabela.readRecord()){
+							for(int i =0; i<test.length; i++)
+						{	
+							l = tabela.get(test[i]);
+							tablicaDanych[line_number1][i] = (l);
+						}	
+							++line_number1;
 						}
-					}
-					try {
-						CSVFile.close();
+						tabela.close();
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
 					} catch (IOException e) {
+						e.printStackTrace();
 					}
 
-					final JTable model = new JTable(tablicaDanych, CsvChooser
-							.getDataArray());
+					final JTable model = new JTable(tablicaDanych, test);
 					JScrollPane scrollPane = new JScrollPane(model);
 					add(scrollPane, BorderLayout.CENTER);
 					generuj.setVisible(false);
-					JToolBar bar = new JToolBar();
-					String[] b = CsvChooser.getDataArray();
+					/**JToolBar bar = new JToolBar();
+					String[] b = test;
 					
 					
 					
@@ -205,7 +189,7 @@ public class CsvFrame extends JFrame implements Serializable {
 					for(i = 0; i<b.length; i++)	{				
 					JCheckBox kolumna = new JCheckBox(b[i], true);
 					bar.add(kolumna);}
-					add(bar, BorderLayout.NORTH);
+					add(bar, BorderLayout.NORTH);*/
 					removedColumns = new ArrayList<TableColumn>();
 					 JPopupMenu popup = new JPopupMenu();
 

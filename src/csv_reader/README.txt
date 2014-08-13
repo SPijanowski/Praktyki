@@ -1,12 +1,10 @@
 Wstęp
 Program umożliwiający czytanie plików CSV
-Wersja 1.21 z dnia 04.08.2014
+Wersja 1.30 z dnia 12.08.2014
 
 Nowości w porównaniu z wersją 1.20
-Możliwość wymierania sposobu zaznaczenia danych w tabeli
-Możliwość ukrywania i pokazywania danych.
-(edytować dane można za pomocą menu kontekstowego, które pojawia się po naciśnięciu
- prawego przycisku myszy na obszarze Tabeli oraz logu programu.);
+Automatycznie wykrywa separator danych;
+Możliwość wyboru wczytywanych danych;
 
 Źródło kodu na edycje tabeli
 Core Java Techniki zaawansowane wydanie VIII wydawnictwo Helion
@@ -19,8 +17,9 @@ http://sourceforge.net/projects/javacsv/files/
 Wykorzystanie
 Aby zacząć pracować należy wejść do menu "Wczytaj plik" i następnie wybrać pozycje "Wczytaj Plik".
 W oknie dialogowym należy nacisnąć przycisk wybierz i wybrać wymagany plik.
-Następnie należy wybrać separator jaki jest używany w pliku csv. Obecnie dostępne opcje to
-Przecinek (,) oraz średnik (;). Domyślnym separatorem jest średnik;
+
+Po dokonaniu wyboru pliku mamy możliwość wczytania wymaganych danych.
+Jeśli użytkownik nie dokona wyboru , wczytany zostanie cały plik.
 
 Po dokonaniu wyboru zostaniemy przeniesieni do okienka powitalnego. 
 Kiedy operacja zostanie poprawnie wykonana na ekranie startowym pojawią się 
