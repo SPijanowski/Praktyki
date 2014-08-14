@@ -17,6 +17,7 @@ class Csv_File
    private String nazwa;
    private static String separator = ";";
    private static String csvFilePath;
+   private static String csvFileName;
 
    public Csv_File(String n, String s)
    {
@@ -89,4 +90,10 @@ class Csv_File
 		}
 		setSeparator(a);
 	}
+public static String getCsvFileName() {
+	return csvFileName;
+}
+public static void setCsvFileName(String csvFileName) {
+	Csv_File.csvFileName = csvFileName;
+}
 }

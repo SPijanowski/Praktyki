@@ -179,24 +179,20 @@ public class CsvChooser extends JPanel implements Serializable {
 					e1.printStackTrace();
 				} 		
 					
-					setDataArray(dataRow.split(Csv_File.getSeparator()));
-					
-					{
-						
+					setDataArray(dataRow.split(Csv_File.getSeparator()));	
+					{						
 					try {
 						CSVFile.close();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 					}
-					
 					try {
 						String a = Csv_File.getSeparator();
 						char b = a.charAt(0);
 						CsvReader tabela = new CsvReader(csvFilePath, b);
-								
 						tabela.readHeaders();
-						
+		
 						
 						while (tabela.readRecord())
 						{	
@@ -211,11 +207,9 @@ public class CsvChooser extends JPanel implements Serializable {
 						e.printStackTrace();
 					}
 					Csv_Table.setRow(countRow-1);
-					
 						String[] dane = getDataArray();
 						final JList abcd = new JList(dane);	
 						abcd.setVisibleRowCount(4);
-						
 						abcd.addListSelectionListener(new ListSelectionListener(){
 							public void valueChanged(ListSelectionEvent event)
 							{	
@@ -225,9 +219,7 @@ public class CsvChooser extends JPanel implements Serializable {
 								selected = new String[lenght];
 								System.arraycopy(values, 0, selected, 0, lenght);		
 							}
-						});
-							
-						
+						});					
 					JScrollPane scroll = new JScrollPane(abcd);
 					
 					northPanel.add(scroll);

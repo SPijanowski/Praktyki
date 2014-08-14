@@ -1,11 +1,13 @@
 Wstęp
 Program umożliwiający czytanie plików CSV
-Wersja 1.40 z dnia 12.08.2014
+Wersja 1.50 z dnia 12.08.2014
 
 Nowości w porównaniu z wersją 1.20
 Automatycznie wykrywa separator danych;
 Możliwość wyboru wczytywanych danych;
 Poprawiono wygląd tabeli;
+Utworzenie pulpitu aplikacji;
+Możliwość wcytywania kilku plików CSV;
 
 Źródło kodu na edycje tabeli
 Core Java Techniki zaawansowane wydanie VIII wydawnictwo Helion
@@ -28,6 +30,8 @@ Po dokonaniu wyboru zostaniemy przeniesieni do okienka powitalnego.
 Kiedy operacja zostanie poprawnie wykonana na ekranie startowym pojawią się 
 napis "GOTOWE!".Następnie użytkownik może wygenerować tabele zawierającą oryginalne dane z pliku. 
 Naciskając przycisk "Generuj"; 
+
+Następnie należy przewinąć pasek podziału w dół, aby zobaczyć zawartość pulpitu;
 
 Edytować tabele można za pomocą menu kontekstowego, które pojawia się po naciśnięciu
 prawego przycisku myszy na obszarze Tabeli oraz logu programu.
