@@ -49,7 +49,7 @@ public class CsvChooser extends JPanel implements Serializable {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public CsvChooser() {
 		setSize(100,600);
-		wybierz = new JButton("Wybierz");
+		wybierz = new JButton("Wybierz plik");
 		wybierz.addActionListener(new fileOpenListener());
 
 		setLayout(new BorderLayout());
@@ -147,6 +147,7 @@ public class CsvChooser extends JPanel implements Serializable {
 		// Ustawienie tytułu i wyświetlenie okna dialogowego
 
 		dialog.setTitle(title);
+		dialog.setSize(200, 300);
 		dialog.setVisible(true);
 		return ok;
 	}

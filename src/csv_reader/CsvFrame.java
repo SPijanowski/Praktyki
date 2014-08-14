@@ -32,7 +32,6 @@ public class CsvFrame extends JFrame implements Serializable {
 	
 	
 	private CsvChooser dialog = null;	
-	private JPanel southPanel = new JPanel();
 	private static JDesktopPane desktop;
 	private static int nextFrameX;
 	private static int nextFrameY;
@@ -67,13 +66,13 @@ public class CsvFrame extends JFrame implements Serializable {
 		setDesktop(new JDesktopPane());
 		
 		add(getDesktop(), BorderLayout.CENTER);
-		
+		desktop.setBackground(new Color(176, 196, 222));		
 		csvInsert = new JTextArea(TEXT_ROWS, TEXT_COLUMNS);
 		csvInsert.setEditable(false);
 		JScrollPane scroll = new JScrollPane(csvInsert);
-		southPanel.add(scroll);
-		add(southPanel, BorderLayout.SOUTH);
-		JSplitPane innerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, desktop, southPanel);
+		//southPanel.add(scroll);
+		add(scroll, BorderLayout.SOUTH);
+		JSplitPane innerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, desktop, scroll);
 		innerPane.setContinuousLayout(true);
 		innerPane.setOneTouchExpandable(true);
 		add(innerPane, BorderLayout.CENTER);
