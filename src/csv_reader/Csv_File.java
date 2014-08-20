@@ -14,15 +14,16 @@ import java.io.IOException;
 
 class Csv_File
 {
-   private String nazwa;
-   private static String separator = ";";
+   
+   private static String separator;
    private static String csvFilePath;
    private static String csvFileName;
 
-   public Csv_File(String n, String s)
+   public Csv_File(String name, String separation, String path)
    {
-      nazwa = n;
-      separator = s;
+	  csvFileName = name;
+      separator = separation;
+      csvFilePath = path;
    }
    public Csv_File(String f)
    {
@@ -30,7 +31,7 @@ class Csv_File
    }
    public String getNazwa()
    {
-      return nazwa;
+      return csvFileName;
    }
 
    public static String getSeparator()
@@ -41,10 +42,6 @@ class Csv_File
    {
 	   return csvFilePath;
    }
-   public void setNazwa(String n)
-   {
-      nazwa = n;
-   }
 
    public static void setSeparator(String s)
    {
@@ -54,7 +51,7 @@ class Csv_File
    {
 	   csvFilePath = f;
    }
-   public static void separation(String path) {
+   public static String separation(String path) {
 		String dataArray[];
 		String a = null;
 		StringBuilder budowa = new StringBuilder();
@@ -88,7 +85,7 @@ class Csv_File
 		} else {
 			a = ";";
 		}
-		setSeparator(a);
+		return a;
 	}
 public static String getCsvFileName() {
 	return csvFileName;

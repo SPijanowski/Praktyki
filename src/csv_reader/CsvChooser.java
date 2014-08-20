@@ -25,32 +25,23 @@ import com.csvreader.CsvReader;
 
 public class CsvChooser extends JPanel implements Serializable {
 	
-	public static String[][] wczytaneDane;
-
 	private static final long serialVersionUID = 5054426769966312408L;
-
-	private JTextField nazwa;
-	
 	private JButton okButton;
 	private boolean ok;
 	private JDialog dialog;
 	private JFileChooser csvFileChooser;
 	private JButton wybierz;
-	@SuppressWarnings("rawtypes")
-	private JComboBox separator;
 	private static String[] dataArray = {""};
 	private int countRow = 0;
 	private JPanel panel = new JPanel();
 	private JPanel northPanel = new JPanel();
 	public static String[] selected;
 
-	
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public CsvChooser() {
 		setSize(100,600);
 		wybierz = new JButton("Wybierz plik");
 		wybierz.addActionListener(new fileOpenListener());
+		
 
 		setLayout(new BorderLayout());
 
@@ -93,34 +84,14 @@ public class CsvChooser extends JPanel implements Serializable {
 		// Dodawanie przycisku wyboru pliku
 		csvFileChooser = new JFileChooser();
 		// Akceptowanie wyboru plików .csv
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				"Pliki CSV", "csv");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Pliki CSV", "csv");
 		csvFileChooser.setFileFilter(filter);
-
-	}
-
-
-	public void setCsvFile(Csv_File f) {
-		nazwa.setText(f.getNazwa());
-	}
-
-
-	public Csv_File getCsvFile() {
-		return new Csv_File(nazwa.getText(), (String) separator.getSelectedItem());
-	}
-
-	public Csv_File getCsvPath() {
-		return new Csv_File(csvFileChooser.getSelectedFile().getPath());
 	}
 
 	/**
-	 * Wyświetla panel z elementami przyjmującymi dane od użytkownika w oknie
-	 * dialogowym
-	 * 
-	 * @param parent
-	 *            komponent w ramce nadrzędnej lub wartość null
-	 * @param title
-	 *            tytuł okna dialogowego
+	 * Wyświetla panel z elementami przyjmującymi dane od użytkownika w oknie dialogowym
+	 * @param parent komponent w ramce nadrzędnej lub wartość null
+	 * @param title tytuł okna dialogowego
 	 */
 	public boolean showDialog(Component parent, String title) {
 		ok = false;
@@ -166,7 +137,8 @@ public class CsvChooser extends JPanel implements Serializable {
 				String csvFilePath = csvFileChooser.getSelectedFile().getPath();
 				Csv_File.setCsvFilePath(csvFilePath);
 				//Wybór separatora
-				Csv_File.separation(csvFilePath);
+				Csv_File.setSeparator(Csv_File.separation(csvFilePath));
+			
 				BufferedReader CSVFile = null;
 				try {
 					CSVFile = new BufferedReader(new FileReader(csvFilePath));
@@ -198,9 +170,7 @@ public class CsvChooser extends JPanel implements Serializable {
 						while (tabela.readRecord())
 						{	
 							countRow++;
-
-						}
-						
+						}				
 					tabela.close();
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -212,6 +182,7 @@ public class CsvChooser extends JPanel implements Serializable {
 						final JList abcd = new JList(dane);	
 						abcd.setVisibleRowCount(4);
 						abcd.addListSelectionListener(new ListSelectionListener(){
+							@SuppressWarnings("deprecation")
 							public void valueChanged(ListSelectionEvent event)
 							{	
 								setSelected(null);
@@ -222,9 +193,7 @@ public class CsvChooser extends JPanel implements Serializable {
 							}
 						});					
 					JScrollPane scroll = new JScrollPane(abcd);
-					
 					northPanel.add(scroll);
-					
 					add(northPanel, BorderLayout.NORTH);
 					SwingUtilities.updateComponentTreeUI(northPanel);
 				    SwingUtilities.updateComponentTreeUI(dialog);
@@ -237,14 +206,6 @@ public class CsvChooser extends JPanel implements Serializable {
 		return dataArray;
 	}
 
-	public void setWczytaneDane(String[][] a) {
-		wczytaneDane = a;
-		
-	}
-	public static String[][] getWczytaneDane(){
-		return wczytaneDane;
-	}
-
 	public static void setDataArray(String[] split) {
 		dataArray = split;
 		
@@ -252,7 +213,6 @@ public class CsvChooser extends JPanel implements Serializable {
 	public static String[] getSelected() {
 		return selected;
 	}
-
 
 	public void setSelected(String[] s) {
 		selected = s;

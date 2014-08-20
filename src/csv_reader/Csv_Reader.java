@@ -3,8 +3,8 @@ package csv_reader;
 /**
  * Program umożliwijący czytanie plików CSV
  * @author Sylwester Pijanowski
- * @version 1.30
- * @date 12.08.2014
+ * @version 1.90
+ * @date 20.08.2014
  */
 import java.awt.EventQueue;
 
@@ -19,7 +19,7 @@ public class Csv_Reader {
 	            public void run()
 	            {
 	               setframe(new CsvFrame());
-	               frame.setTitle("Csv_Reader version 1.50; Aby zobaczyć zawartość pulpitu należy presunąć pasek podziału w dół!");      
+	               frame.setTitle("Csv_Reader version 1.90");      
 	               frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	               frame.setVisible(true);
 	               frame.setSize(1000, 500);
