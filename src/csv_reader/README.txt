@@ -1,13 +1,11 @@
 Wstęp
 Program umożliwiający czytanie plików CSV
-Wersja 1.50 z dnia 12.08.2014
+Wersja 1.90 z dnia 25.08.2014
 
-Nowości w porównaniu z wersją 1.20
-Automatycznie wykrywa separator danych;
-Możliwość wyboru wczytywanych danych;
-Poprawiono wygląd tabeli;
-Utworzenie pulpitu aplikacji;
-Możliwość wcytywania kilku plików CSV;
+Nowości w porównaniu z wersją 1.50
+Możliwość wyszukiwania duplikatów w plikach CSV(Aktualnie w tym samym pliku lub plikach które posiadają takie same dane początkowe);
+Generowanie tabel zawierających dane i duplikaty;
+Możliwość zapisywania tabeli z niedublującymi się elementami(Wersja testowa - plik wyjścia users.csv); 
 
 Źródło kodu na edycje tabeli
 Core Java Techniki zaawansowane wydanie VIII wydawnictwo Helion
@@ -40,9 +38,23 @@ Dostępne są następujące opcje:
 -możliwość wybrania sposobu zaznaczenia danych;
 -możliwość ukrycia/pokazania ukrytych kolumn;
 
+Następną funkcjonalościa jest możliwość wyszukiwania duplikatów;
+W celu ich wyszukania należy wybrać z menu opcje "Porównaj pliki CSV"
+Następnie wykonujemy kroki podobnie jak w przypadku wybrania opcji wczytania pliku CSV.
+
+Po dokonaniu wyboru pojawi sie przycisk Generuj.
+
+Po naciśnięciu przycisku w górnej części ekranu pojawia sie 2 okienka 
+jedno z niepowtarzającymi sie danymi, drugie z duplikatami.
+
+istnieje możliwość zapisanie nieduplikujących sie informacji w pliku zewnętrznym o nazwie users.csv.
+(Jest to prototyp zapisu danych);
+
 Informacje dodatkowe
 Aplikacja opiera sie na kodzie zawartym w książce:
 Core Java Techniki zaawansowane wydanie VIII wydawnictwo Helion
 
 Numerowanie wierszy i kolor wierszy
 Źródło: http://xis.schowek.net/2009/03/11/upiekszanie-jtable/
+
+

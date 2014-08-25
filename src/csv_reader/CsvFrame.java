@@ -10,8 +10,10 @@ package csv_reader;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,16 +25,15 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import com.csvreader.CsvReader;
+import com.csvreader.CsvWriter;
 
 public class CsvFrame extends JFrame implements Serializable {
 
-	
 	public static final int TEXT_ROWS = 5;
 	public static final int TEXT_COLUMNS = 90;
 	public static JMenuBar mBar;
 	public static JTextArea csvInsert;
 	public String[][] compare;
-	
 	
 	private CsvChooser dialog = null;
 	private CompareCSV compareCsv;
@@ -40,6 +41,8 @@ public class CsvFrame extends JFrame implements Serializable {
 	private static int nextFrameX;
 	private static int nextFrameY;
 	private static int frameDistance;
+	private int[] nonCopyRow = {};
+	private int[] copyRow = {};
 	private ArrayList<TableColumn> removedColumns;
 	private static final long serialVersionUID = 2537576951291269546L;
 
@@ -128,9 +131,11 @@ public class CsvFrame extends JFrame implements Serializable {
 				int wczyt = 2 + CompareCSV.getFirstFileRow()+CompareCSV.getSecondFileRow();
 				int line_number1 = 0;
 				String l = null;
-				final String[] test = CompareCSV.getFirstDataArray();
-				System.out.println(wczyt);
-				System.out.println(test);
+				String[] test = {};
+				String[] firstselceted = CompareCSV.getFirstFileSelected();
+				if (firstselceted!=null){test = firstselceted;}else{
+				 test = CompareCSV.getFirstDataArray();}
+				final String[] nameOfColumns = test; 
 				String[][] compare = new String[wczyt][test.length];
 				try {
 					String a = CompareCSV.getFirstSeparator();
@@ -169,8 +174,6 @@ public class CsvFrame extends JFrame implements Serializable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				System.out.println();
-				System.out.println(Arrays.deepToString(compare));	
 				Arrays.sort(compare, new Comparator<String[]>() {
 		            @Override
 		            public int compare(final String[] entry1, final String[] entry2) {
@@ -179,8 +182,6 @@ public class CsvFrame extends JFrame implements Serializable {
 		                return time1.compareTo(time2);
 		            }
 		        });
-				System.out.println(Arrays.deepToString(compare));	
-				System.out.println(compare.length);
 				int petle = 0;
 				int inne = 0;
 				int pow = 0;
@@ -191,10 +192,10 @@ public class CsvFrame extends JFrame implements Serializable {
 					{inne++;}	
 					petle++;
 				}
+				int [] nonCopyRow = new int[inne];
+				int [] copyRow = new int[pow];
 				int nowe = inne;
 				int powtarza = pow;
-					
-				System.out.println("Pętle = "+compare.length+"; inne = "+nowe+"; Powtarzające = "+powtarza);
 				final String[][] niepowtarzalne = new String[inne][compare[0].length];
 				final String[][] powtarjace = new String[pow][compare[0].length];
 				petle = 0;
@@ -203,27 +204,29 @@ public class CsvFrame extends JFrame implements Serializable {
 				while(petle < compare.length-1){
 					if(compare[petle][0].equals(compare[petle+1][0]))
 					{	
-						for(int i =0; i<compare[petle].length;i++)
+						for(int i = 0; i < compare[petle].length; i++)
 						{
-						powtarjace[nowaDana][i] = compare[petle][i];}
-						nowaDana++;
+						powtarjace[powDana][i] = compare[petle][i];}
+						copyRow[powDana] = petle;
+						powDana++;
 						petle++;
 					}
 					else 
 					{
 						for(int i =0; i<compare[petle].length;i++)
-						{niepowtarzalne[powDana][i] = compare[petle][i];}
-						powDana++;
+						{niepowtarzalne[nowaDana][i] = compare[petle][i];}
+						nonCopyRow[nowaDana] = petle;
+						nowaDana++;
 						petle++;
 					}
 				}
+				System.out.print(niepowtarzalne.length);
 				generuj = new JButton("Generuj Tabele");
 				generuj.addActionListener(new ActionListener() {
-					
 					public void actionPerformed(ActionEvent event){
 						JInternalFrame listFrame = new JInternalFrame("niepowtarzalne", true, true, true, true);
 						JInternalFrame listFrame2 = new JInternalFrame("Powtazajace sie", true, true, true, true);
-						final JTable model = new JTable(niepowtarzalne, test);
+						final JTable model = new JTable(niepowtarzalne, nameOfColumns);
 						model.setAutoCreateRowSorter(true);
 						model.setDefaultRenderer(Object.class,
 								new ColorCellRenderer());
@@ -234,7 +237,7 @@ public class CsvFrame extends JFrame implements Serializable {
 						    listFrame.setSize(500, 200);
 						    listFrame.setVisible(true);
 						desktop.add(listFrame, BorderLayout.NORTH);
-						final JTable model2 = new JTable(powtarjace, test);
+						JTable model2 = new JTable(powtarjace, nameOfColumns);
 						model2.setAutoCreateRowSorter(true);
 						model2.setDefaultRenderer(Object.class,
 								new ColorCellRenderer());
@@ -293,7 +296,47 @@ public class CsvFrame extends JFrame implements Serializable {
 						});
 						selectionMenu.add(cellsItem);
 						popup.add(selectionMenu);
-
+						JMenuItem saveFile= new JMenuItem("Zapisz");
+						saveFile.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent event) {
+								String outputFile = "users.csv";
+								
+								// before we open the file check to see if it already exists
+								boolean alreadyExists = new File(outputFile).exists();
+									
+								try {
+									// use FileWriter constructor that specifies open for appending
+									String a = CompareCSV.getFirstSeparator();
+									char b = a.charAt(0);
+									CsvWriter csvOutput = new CsvWriter(new FileWriter(outputFile, true), b);
+									
+									// if the file didn't already exist then we need to write out the header line
+									if (!alreadyExists)
+									{	
+										for(String s: nameOfColumns)
+										csvOutput.write(s);
+										csvOutput.endRecord();
+									}
+									// else assume that the file already has the correct header line
+									
+									// write out a few records
+									int pentla = 0;
+									while(pentla <= niepowtarzalne.length-1){
+										for(int i =0; i<=niepowtarzalne[0].length-1; i++)
+									csvOutput.write(niepowtarzalne[pentla][i]);
+									csvOutput.endRecord();
+									pentla++;
+									}
+									
+									
+									
+									csvOutput.close();
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
+						});
+						popup.add(saveFile);
 						model.setComponentPopupMenu(popup);
 						csvInsert.setComponentPopupMenu(popup);
 						JMenu tableMenu = new JMenu("Edycja");
@@ -339,7 +382,8 @@ public class CsvFrame extends JFrame implements Serializable {
 
 					}});
 				csvInsert.setForeground(new Color(0, 100, 0));
-				csvInsert.append("Pętle = "+compare.length+"; inne = "+nowe+"; Powtarzające = "+powtarza);
+				
+				csvInsert.append("Pętle = "+compare.length+"; inne = "+nowe+"; Powtarzające = "+powtarza+"\r\n");
 				add(generuj, BorderLayout.NORTH);}
 		}
 	}
@@ -398,6 +442,7 @@ public class CsvFrame extends JFrame implements Serializable {
 					String[] test = null;
 					String a = Csv_File.getSeparator();
 					String path = Csv_File.getScvFilePath();
+					System.out.println(a);
 					char sep = a.charAt(0);
 					String[] wybraane = CsvChooser.getSelected();
 					//Sprawdzenie czy użytkownik wybrał dane do wczytania

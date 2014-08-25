@@ -22,48 +22,41 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.csvreader.CsvReader;
 
-
 public class CsvChooser extends JPanel implements Serializable {
-	
+
 	private static final long serialVersionUID = 5054426769966312408L;
 	private JButton okButton;
 	private boolean ok;
 	private JDialog dialog;
 	private JFileChooser csvFileChooser;
 	private JButton wybierz;
-	private static String[] dataArray = {""};
+	private static String[] dataArray = { "" };
 	private int countRow = 0;
 	private JPanel panel = new JPanel();
 	private JPanel northPanel = new JPanel();
 	public static String[] selected;
 
 	public CsvChooser() {
-		setSize(100,600);
+		setSize(100, 600);
 		wybierz = new JButton("Wybierz plik");
 		wybierz.addActionListener(new fileOpenListener());
-		
 
 		setLayout(new BorderLayout());
 
 		// Utworzenie panelu z polami nazwy użytkownika i hasła
-		
-		
 		panel.setLayout(new GridLayout(4, 2));
-
 		panel.add(new JLabel("Wybierz Plik:"));
 		panel.add(wybierz);
-		
 		add(panel, BorderLayout.CENTER);
 
 		// Utworzenie przycisków OK i Anuluj, które zamykają okno dialogowe
-
 		okButton = new JButton("Ok");
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				ok = true;
 				dialog.setVisible(false);
 				SwingUtilities.updateComponentTreeUI(Csv_Reader.frame);
-				
+
 			}
 		});
 
@@ -75,7 +68,6 @@ public class CsvChooser extends JPanel implements Serializable {
 		});
 
 		// Dodawanie przycisków w pobliżu południowej krawędzi
-
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(okButton);
 		buttonPanel.add(cancelButton);
@@ -83,31 +75,34 @@ public class CsvChooser extends JPanel implements Serializable {
 
 		// Dodawanie przycisku wyboru pliku
 		csvFileChooser = new JFileChooser();
+		
 		// Akceptowanie wyboru plików .csv
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Pliki CSV", "csv");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"Pliki CSV", "csv");
 		csvFileChooser.setFileFilter(filter);
 	}
 
 	/**
-	 * Wyświetla panel z elementami przyjmującymi dane od użytkownika w oknie dialogowym
-	 * @param parent komponent w ramce nadrzędnej lub wartość null
-	 * @param title tytuł okna dialogowego
+	 * Wyświetla panel z elementami przyjmującymi dane od użytkownika w oknie
+	 * dialogowym	 
+	 * @param parent
+	 * komponent w ramce nadrzędnej lub wartość null
+	 * @param title
+	 * tytuł okna dialogowego
 	 */
 	public boolean showDialog(Component parent, String title) {
 		ok = false;
-
+		
 		// Lokalizacja ramki nadrzędnej
-
 		Frame owner = null;
 		if (parent instanceof Frame)
 			owner = (Frame) parent;
 		else
 			owner = (Frame) SwingUtilities.getAncestorOfClass(Frame.class,
 					parent);
-
+		
 		// Jeśli jest to pierwszy raz lub zmienił się użytkownik, utworzenie
 		// nowego okna dialogowego
-
 		if (dialog == null || dialog.getOwner() != owner) {
 			dialog = new JDialog(owner, true);
 			dialog.add(this);
@@ -116,7 +111,6 @@ public class CsvChooser extends JPanel implements Serializable {
 		}
 
 		// Ustawienie tytułu i wyświetlenie okna dialogowego
-
 		dialog.setTitle(title);
 		dialog.setSize(200, 300);
 		dialog.setVisible(true);
@@ -136,9 +130,10 @@ public class CsvChooser extends JPanel implements Serializable {
 			if (result == JFileChooser.APPROVE_OPTION) {
 				String csvFilePath = csvFileChooser.getSelectedFile().getPath();
 				Csv_File.setCsvFilePath(csvFilePath);
-				//Wybór separatora
+				
+				// Wybór separatora
 				Csv_File.setSeparator(Csv_File.separation(csvFilePath));
-			
+
 				BufferedReader CSVFile = null;
 				try {
 					CSVFile = new BufferedReader(new FileReader(csvFilePath));
@@ -150,66 +145,61 @@ public class CsvChooser extends JPanel implements Serializable {
 					dataRow = CSVFile.readLine();
 				} catch (IOException e1) {
 					e1.printStackTrace();
-				} 		
-					
-					setDataArray(dataRow.split(Csv_File.getSeparator()));	
-					{						
+				}
+
+				setDataArray(dataRow.split(Csv_File.getSeparator()));
+				{
 					try {
 						CSVFile.close();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+				}
+				try {
+					String a = Csv_File.getSeparator();
+					char b = a.charAt(0);
+					CsvReader tabela = new CsvReader(csvFilePath, b);
+					tabela.readHeaders();
+					while (tabela.readRecord()) {
+						countRow++;
 					}
-					try {
-						String a = Csv_File.getSeparator();
-						char b = a.charAt(0);
-						CsvReader tabela = new CsvReader(csvFilePath, b);
-						tabela.readHeaders();
-		
-						
-						while (tabela.readRecord())
-						{	
-							countRow++;
-						}				
 					tabela.close();
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				Csv_Table.setRow(countRow - 1);
+				String[] dane = getDataArray();
+				final JList abcd = new JList(dane);
+				abcd.setVisibleRowCount(4);
+				abcd.addListSelectionListener(new ListSelectionListener() {
+					@SuppressWarnings("deprecation")
+					public void valueChanged(ListSelectionEvent event) {
+						setSelected(null);
+						Object values[] = abcd.getSelectedValues();
+						int lenght = values.length;
+						selected = new String[lenght];
+						System.arraycopy(values, 0, selected, 0, lenght);
 					}
-					Csv_Table.setRow(countRow-1);
-						String[] dane = getDataArray();
-						final JList abcd = new JList(dane);	
-						abcd.setVisibleRowCount(4);
-						abcd.addListSelectionListener(new ListSelectionListener(){
-							@SuppressWarnings("deprecation")
-							public void valueChanged(ListSelectionEvent event)
-							{	
-								setSelected(null);
-								Object values[] = abcd.getSelectedValues();
-								int lenght = values.length;
-								selected = new String[lenght];
-								System.arraycopy(values, 0, selected, 0, lenght);		
-							}
-						});					
-					JScrollPane scroll = new JScrollPane(abcd);
-					northPanel.add(scroll);
-					add(northPanel, BorderLayout.NORTH);
-					SwingUtilities.updateComponentTreeUI(northPanel);
-				    SwingUtilities.updateComponentTreeUI(dialog);
-					}
+				});
+				JScrollPane scroll = new JScrollPane(abcd);
+				northPanel.add(scroll);
+				add(northPanel, BorderLayout.NORTH);
+				SwingUtilities.updateComponentTreeUI(northPanel);
+				SwingUtilities.updateComponentTreeUI(dialog);
 			}
 		}
+	}
 
 	public static String[] getDataArray() {
-		
 		return dataArray;
 	}
 
 	public static void setDataArray(String[] split) {
 		dataArray = split;
-		
 	}
+
 	public static String[] getSelected() {
 		return selected;
 	}
