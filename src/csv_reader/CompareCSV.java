@@ -44,6 +44,7 @@ public class CompareCSV extends JPanel {
 	private static String secondSeparator;
 	private static String firstFilePath;
 	private static String secondFilePath;
+	private static int selc;
 
 	private JButton wybierz1;
 
@@ -143,8 +144,9 @@ public class CompareCSV extends JPanel {
 							int lenght = values.length;
 							firstFileSelected = new String[lenght];
 							System.arraycopy(values, 0, firstFileSelected, 0, lenght);
+							selc = abcd.getLeadSelectionIndex();
 						}
-					});
+					});					
 					northPanel.add(new JLabel("Dane pierwszego pliku do porównania"));
 					JScrollPane scroll = new JScrollPane(abcd);
 					northPanel.add(scroll);
@@ -243,6 +245,16 @@ public class CompareCSV extends JPanel {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"Pliki CSV", "csv");
 		csvFirstFileChooser.setFileFilter(filter);
+	}
+
+
+	public static int getSelc() {
+		return selc;
+	}
+
+
+	public void setSelc(int selc) {
+		this.selc = selc;
 	}
 
 

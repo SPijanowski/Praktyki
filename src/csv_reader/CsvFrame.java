@@ -131,10 +131,11 @@ public class CsvFrame extends JFrame implements Serializable {
 				int wczyt = 2 + CompareCSV.getFirstFileRow()+CompareCSV.getSecondFileRow();
 				int line_number1 = 0;
 				String l = null;
-				String[] test = {};
+				String[] test = CompareCSV.getFirstDataArray();
+				/**String[] test = {};
 				String[] firstselceted = CompareCSV.getFirstFileSelected();
 				if (firstselceted!=null){test = firstselceted;}else{
-				 test = CompareCSV.getFirstDataArray();}
+				 test = CompareCSV.getFirstDataArray();} */
 				final String[] nameOfColumns = test; 
 				String[][] compare = new String[wczyt][test.length];
 				try {
@@ -174,11 +175,14 @@ public class CsvFrame extends JFrame implements Serializable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				int wybr = CompareCSV.getSelc();
+				final int t;
+				if (wybr!=-1){t = wybr;}else{ t = 0;}
 				Arrays.sort(compare, new Comparator<String[]>() {
 		            @Override
 		            public int compare(final String[] entry1, final String[] entry2) {
-		                final String time1 = entry1[0];
-		                final String time2 = entry2[0];
+		                final String time1 = entry1[t];
+		                final String time2 = entry2[t];
 		                return time1.compareTo(time2);
 		            }
 		        });
@@ -186,7 +190,7 @@ public class CsvFrame extends JFrame implements Serializable {
 				int inne = 0;
 				int pow = 0;
 				while(petle < compare.length-1){
-					if(compare[petle][0].equals(compare[petle+1][0]))
+					if(compare[petle][t].equals(compare[petle+1][t]))
 					{pow++;}
 					else
 					{inne++;}	
@@ -202,7 +206,7 @@ public class CsvFrame extends JFrame implements Serializable {
 				int nowaDana = 0;
 				int powDana = 0;
 				while(petle < compare.length-1){
-					if(compare[petle][0].equals(compare[petle+1][0]))
+					if(compare[petle][t].equals(compare[petle+1][t]))
 					{	
 						for(int i = 0; i < compare[petle].length; i++)
 						{
