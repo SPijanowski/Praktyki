@@ -227,8 +227,8 @@ public class CsvFrame extends JFrame implements Serializable {
 				generuj = new JButton("Generuj Tabele");
 				generuj.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent event){
-						JInternalFrame listFrame = new JInternalFrame("niepowtarzalne", true, true, true, true);
-						JInternalFrame listFrame2 = new JInternalFrame("Powtazajace sie", true, true, true, true);
+						JInternalFrame listFrame = new JInternalFrame("Niepowtarzalne z plików \"" + Csv_File.csvFileName(CompareCSV.getFirstFilePath()) + "\" oraz \""+ Csv_File.csvFileName(CompareCSV.getSecondFilePath())+"\"", true, true, true, true);
+						JInternalFrame listFrame2 = new JInternalFrame("Powtazajace sie z plików \"" + Csv_File.csvFileName(CompareCSV.getFirstFilePath()) + "\" oraz \""+ Csv_File.csvFileName(CompareCSV.getSecondFilePath())+"\"", true, true, true, true);
 						final JTable model = new JTable(niepowtarzalne, nameOfColumns);
 						model.setAutoCreateRowSorter(true);
 						model.setDefaultRenderer(Object.class,
@@ -302,7 +302,7 @@ public class CsvFrame extends JFrame implements Serializable {
 						JMenuItem saveFile= new JMenuItem("Zapisz");
 						saveFile.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent event) {
-								String outputFile = "users.csv";
+								String outputFile = "Niepowtarzalny" + Csv_File.csvFileName(CompareCSV.getFirstFilePath()) + Csv_File.csvFileName(CompareCSV.getSecondFilePath());
 								
 								// before we open the file check to see if it already exists
 								boolean alreadyExists = new File(outputFile).exists();
@@ -386,7 +386,8 @@ public class CsvFrame extends JFrame implements Serializable {
 					}});
 				csvInsert.setForeground(new Color(0, 100, 0));
 				
-				csvInsert.append("Pętle = "+compare.length+"; inne = "+nowe+"; Powtarzające = "+powtarza+"\r\n");
+				csvInsert.append("Porównano pliki \""+ Csv_File.csvFileName(CompareCSV.getFirstFilePath())+"\" oraz \""+ Csv_File.csvFileName(CompareCSV.getSecondFilePath())+
+						"\". Ilość sprawdzeń = "+compare.length+"; Inne = "+nowe+"; Powtarzające = "+powtarza+";\r\n");
 				add(generuj, BorderLayout.NORTH);}
 		}
 	}
@@ -445,7 +446,6 @@ public class CsvFrame extends JFrame implements Serializable {
 					String[] test = null;
 					String a = Csv_File.getSeparator();
 					String path = Csv_File.getScvFilePath();
-					System.out.println(a);
 					char sep = a.charAt(0);
 					String[] wybraane = CsvChooser.getSelected();
 					//Sprawdzenie czy użytkownik wybrał dane do wczytania

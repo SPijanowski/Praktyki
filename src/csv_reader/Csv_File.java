@@ -93,4 +93,10 @@ public static String getCsvFileName() {
 public static void setCsvFileName(String csvFileName) {
 	Csv_File.csvFileName = csvFileName;
 }
+public static String csvFileName(String path){
+	StringBuilder b = new StringBuilder(path);
+	int c = b.lastIndexOf("\\");
+	String d = b.substring(c+1);
+	return d;
+}
 }
