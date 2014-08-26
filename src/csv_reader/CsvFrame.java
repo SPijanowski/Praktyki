@@ -224,7 +224,6 @@ public class CsvFrame extends JFrame implements Serializable {
 						petle++;
 					}
 				}
-				System.out.print(niepowtarzalne.length);
 				generuj = new JButton("Generuj Tabele");
 				generuj.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent event){
