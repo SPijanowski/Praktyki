@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Program umożliwijący czytanie plików CSV
@@ -80,8 +82,14 @@ class Csv_File
 		} catch (IOException e) {
 		}
 		double spr = budowa.indexOf(";");
+		double spr1 = budowa.indexOf(",");
+		double spr2 = budowa.indexOf("\"");
 		if (spr == -1) {
-			a = ",";
+			if(spr1 == -1){
+				if(spr2 == -1){{a = null;}}
+				else {a = "\"";}}
+			else 
+			{a = ",";}
 		} else {
 			a = ";";
 		}
@@ -99,4 +107,10 @@ public static String csvFileName(String path){
 	String d = b.substring(c+1);
 	return d;
 }
+
+public static String[] removeNull(String[] a) {
+	 ArrayList<String> removed = new ArrayList<String>(); 
+	 for (String str : a) 
+		 if (str != null) removed.add(str); 
+	 return removed.toArray(new String[0]);}
 }

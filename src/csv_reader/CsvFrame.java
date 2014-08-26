@@ -192,8 +192,9 @@ public class CsvFrame extends JFrame implements Serializable {
 				while(petle < compare.length-1){
 					if(compare[petle][t].equals(compare[petle+1][t]))
 					{pow++;}
-					else
-					{inne++;}	
+					else{if(petle<=0){inne++;}else {if(compare[petle][t].equals(compare[petle-1][t]))
+					{pow++;}else
+					{inne++;}}}
 					petle++;
 				}
 				int [] nonCopyRow = new int[inne];
@@ -216,13 +217,28 @@ public class CsvFrame extends JFrame implements Serializable {
 						petle++;
 					}
 					else 
-					{
-						for(int i =0; i<compare[petle].length;i++)
+					{if(petle <= 0){
+						for(int i = 0; i<compare[petle].length;i++)
 						{niepowtarzalne[nowaDana][i] = compare[petle][i];}
 						nonCopyRow[nowaDana] = petle;
 						nowaDana++;
 						petle++;
 					}
+					else{if(compare[petle][t].equals(compare[petle-1][t])){
+						for(int i = 0; i < compare[petle].length; i++)
+						{
+						powtarjace[powDana][i] = compare[petle][i];}
+						copyRow[powDana] = petle;
+						powDana++;
+						petle++;
+						}
+					else{
+						for(int i = 0; i<compare[petle].length;i++)
+						{niepowtarzalne[nowaDana][i] = compare[petle][i];}
+						nonCopyRow[nowaDana] = petle;
+						nowaDana++;
+						petle++;}
+					}}
 				}
 				generuj = new JButton("Generuj Tabele");
 				generuj.addActionListener(new ActionListener() {
@@ -385,9 +401,9 @@ public class CsvFrame extends JFrame implements Serializable {
 
 					}});
 				csvInsert.setForeground(new Color(0, 100, 0));
-				
+				int spr = compare.length - 1;
 				csvInsert.append("Porównano pliki \""+ Csv_File.csvFileName(CompareCSV.getFirstFilePath())+"\" oraz \""+ Csv_File.csvFileName(CompareCSV.getSecondFilePath())+
-						"\". Ilość sprawdzeń = "+compare.length+"; Inne = "+nowe+"; Powtarzające = "+powtarza+";\r\n");
+						"\". Ilość sprawdzeń = "+spr+"; Inne = "+nowe+"; Powtarzające = "+powtarza+";\r\n");
 				add(generuj, BorderLayout.NORTH);}
 		}
 	}
@@ -456,7 +472,7 @@ public class CsvFrame extends JFrame implements Serializable {
 					}
 					try {
 					//Obiczanie wielkości tablicy
-						CsvReader tabela = new CsvReader(path, sep);
+						CsvReader tabela = new CsvReader(path,sep);
 						tabela.readHeaders();
 						while (tabela.readRecord()) {
 							++line_number;
@@ -470,7 +486,7 @@ public class CsvFrame extends JFrame implements Serializable {
 					//Zapisywanie wczytywanych danych w tablicy wielowymiarowej
 					String[][] tablicaDanych = new String[line_number][test.length];
 					try {
-						CsvReader tabela = new CsvReader(path, sep);
+						CsvReader tabela = new CsvReader(path,sep);
 						tabela.readHeaders();
 						while (tabela.readRecord()) {
 							for (int i = 0; i < test.length; i++) {
