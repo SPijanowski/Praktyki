@@ -259,7 +259,7 @@ public class CompareCSV extends JPanel {
 
 
 	public String[] getSecondDataArray() {
-		return secondDataArray;
+		return Csv_File.removeEmptyField(secondDataArray);
 	}
 
 
@@ -288,7 +288,7 @@ public class CompareCSV extends JPanel {
 		secondFilePath = f2;
 	}
 	public static String[] getFirstDataArray() {
-		return firstDataArray;
+		return Csv_File.removeEmptyField(firstDataArray);
 	}
 
 	public static void setFirstDataArray(String[] firstDataArray) {

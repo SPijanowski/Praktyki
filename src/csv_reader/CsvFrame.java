@@ -207,7 +207,21 @@ public class CsvFrame extends JFrame implements Serializable {
 				int nowaDana = 0;
 				int powDana = 0;
 				while(petle < compare.length-1){
-					if(compare[petle][t].equals(compare[petle+1][t]))
+					if(petle<=0){if(compare[petle][t].equals(compare[petle+1][t])){
+						for(int i = 0; i < compare[petle].length; i++)
+						{
+						powtarjace[powDana][i] = compare[petle][i];}
+						copyRow[powDana] = petle;
+						powDana++;
+						petle++;
+						}
+					else{
+						for(int i = 0; i<compare[petle].length;i++)
+						{niepowtarzalne[nowaDana][i] = compare[petle][i];}
+						nonCopyRow[nowaDana] = petle;
+						nowaDana++;
+						petle++;}}else{
+					if(compare[petle][t].equals(compare[petle-1][t]))
 					{	
 						for(int i = 0; i < compare[petle].length; i++)
 						{
@@ -215,16 +229,8 @@ public class CsvFrame extends JFrame implements Serializable {
 						copyRow[powDana] = petle;
 						powDana++;
 						petle++;
-					}
-					else 
-					{if(petle <= 0){
-						for(int i = 0; i<compare[petle].length;i++)
-						{niepowtarzalne[nowaDana][i] = compare[petle][i];}
-						nonCopyRow[nowaDana] = petle;
-						nowaDana++;
-						petle++;
-					}
-					else{if(compare[petle][t].equals(compare[petle-1][t])){
+					}					
+					else{if(compare[petle][t].equals(compare[petle+1][t])){
 						for(int i = 0; i < compare[petle].length; i++)
 						{
 						powtarjace[powDana][i] = compare[petle][i];}
@@ -325,8 +331,8 @@ public class CsvFrame extends JFrame implements Serializable {
 									
 								try {
 									// use FileWriter constructor that specifies open for appending
-									String a = CompareCSV.getFirstSeparator();
-									char b = a.charAt(0);
+									
+									char b = ';';
 									CsvWriter csvOutput = new CsvWriter(new FileWriter(outputFile, true), b);
 									
 									// if the file didn't already exist then we need to write out the header line
@@ -466,9 +472,9 @@ public class CsvFrame extends JFrame implements Serializable {
 					String[] wybraane = CsvChooser.getSelected();
 					//Sprawdzenie czy użytkownik wybrał dane do wczytania
 					if (wybraane != null) {
-						test = wybraane;
+						test = Csv_File.removeEmptyField(wybraane);
 					} else {
-						test = CsvChooser.getDataArray();
+						test = Csv_File.removeEmptyField(CsvChooser.getDataArray());
 					}
 					try {
 					//Obiczanie wielkości tablicy
@@ -484,7 +490,7 @@ public class CsvFrame extends JFrame implements Serializable {
 						e.printStackTrace();
 					}
 					//Zapisywanie wczytywanych danych w tablicy wielowymiarowej
-					String[][] tablicaDanych = new String[line_number][test.length];
+					final String[][] tablicaDanych = new String[line_number][test.length];
 					try {
 						CsvReader tabela = new CsvReader(path,sep);
 						tabela.readHeaders();
@@ -524,7 +530,12 @@ public class CsvFrame extends JFrame implements Serializable {
 							"Kolumny");
 					final JCheckBoxMenuItem cellsItem = new JCheckBoxMenuItem(
 							"Komórki");
-
+					for(String i : tablicaDanych[4])
+					System.out.print(i+"; ");
+					System.out.println();
+					String[]avcc = Csv_File.removeEmptyField(tablicaDanych[4]);
+					for(String i : avcc)
+						System.out.print(i+"; ");
 					rowsItem.setSelected(model.getRowSelectionAllowed());
 					columnsItem.setSelected(model.getColumnSelectionAllowed());
 					cellsItem.setSelected(model.getCellSelectionEnabled());
@@ -601,6 +612,48 @@ public class CsvFrame extends JFrame implements Serializable {
 							removedColumns.clear();
 						}
 					});
+					JMenuItem saveFile= new JMenuItem("Zapisz");
+					saveFile.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent event) {
+							String outputFile = "Niepowtarzalny.csv";
+							
+							// before we open the file check to see if it already exists
+							boolean alreadyExists = new File(outputFile).exists();
+								
+							try {
+								// use FileWriter constructor that specifies open for appending
+								
+								char b = ';';
+								CsvWriter csvOutput = new CsvWriter(new FileWriter(outputFile, true), b);
+								
+								final String[] nameOfColumns = CsvChooser.getDataArray();
+								// if the file didn't already exist then we need to write out the header line
+								if (!alreadyExists)
+								{	
+									for(String s: nameOfColumns)
+									csvOutput.write(s);
+									csvOutput.endRecord();
+								}
+								// else assume that the file already has the correct header line
+								
+								// write out a few records
+								int pentla = 0;
+								while(pentla <= tablicaDanych.length-1){
+									for(int i =0; i<=tablicaDanych[0].length-1; i++)
+								csvOutput.write(tablicaDanych[pentla][i]);
+								csvOutput.endRecord();
+								pentla++;
+								}
+								
+								
+								
+								csvOutput.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					});
+					popup.add(saveFile);
 					tableMenu.add(showColumnsItem);
 					popup.add(tableMenu);
 

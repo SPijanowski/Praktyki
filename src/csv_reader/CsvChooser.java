@@ -177,7 +177,7 @@ public class CsvChooser extends JPanel implements Serializable {
 				}
 				if(Csv_File.separation(csvFilePath)!= "\""){
 				Csv_Table.setRow(countRow - 1);
-				String[] dane = getDataArray();
+				String[] dane = Csv_File.removeEmptyField(getDataArray());
 				final JList abcd = new JList(dane);
 				abcd.setVisibleRowCount(4);
 				abcd.addListSelectionListener(new ListSelectionListener() {
@@ -202,7 +202,7 @@ public class CsvChooser extends JPanel implements Serializable {
 	}
 
 	public static String[] getDataArray() {
-		return dataArray;
+		return Csv_File.removeEmptyField(dataArray);
 	}
 
 	public static void setDataArray(String[] split) {
