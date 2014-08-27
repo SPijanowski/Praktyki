@@ -148,9 +148,7 @@ public class CsvChooser extends JPanel implements Serializable {
 				}
 				
 				setDataArray(dataRow.split(Csv_File.separation(csvFilePath)));
-				String[] abc = getDataArray();
-				
-					System.out.print(abc);
+									
 				{
 					try {
 						CSVFile.close();
@@ -161,7 +159,7 @@ public class CsvChooser extends JPanel implements Serializable {
 				try {
 					String a = Csv_File.getSeparator();
 					char b = a.charAt(0);
-					System.out.println(b);
+					
 				
 					CsvReader tabela = new CsvReader(csvFilePath, b);
 					
@@ -175,7 +173,7 @@ public class CsvChooser extends JPanel implements Serializable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				if(Csv_File.separation(csvFilePath)!= "\""){
+				
 				Csv_Table.setRow(countRow - 1);
 				String[] dane = Csv_File.removeEmptyField(getDataArray());
 				final JList abcd = new JList(dane);
@@ -196,7 +194,7 @@ public class CsvChooser extends JPanel implements Serializable {
 				SwingUtilities.updateComponentTreeUI(northPanel);
 				SwingUtilities.updateComponentTreeUI(dialog);
 				
-			}}
+			}
 			
 		}
 	}

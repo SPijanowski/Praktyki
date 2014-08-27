@@ -530,12 +530,7 @@ public class CsvFrame extends JFrame implements Serializable {
 							"Kolumny");
 					final JCheckBoxMenuItem cellsItem = new JCheckBoxMenuItem(
 							"Komórki");
-					for(String i : tablicaDanych[4])
-					System.out.print(i+"; ");
-					System.out.println();
-					String[]avcc = Csv_File.removeEmptyField(tablicaDanych[4]);
-					for(String i : avcc)
-						System.out.print(i+"; ");
+					
 					rowsItem.setSelected(model.getRowSelectionAllowed());
 					columnsItem.setSelected(model.getColumnSelectionAllowed());
 					cellsItem.setSelected(model.getCellSelectionEnabled());
