@@ -146,8 +146,10 @@ public class CsvChooser extends JPanel implements Serializable {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				
-				setDataArray(dataRow.split(Csv_File.separation(csvFilePath)));
+				if(Csv_File.separation(csvFilePath)!= null){if(Csv_File.separation(csvFilePath)!= null)
+				{setDataArray(dataRow.split(Csv_File.separation(csvFilePath)));}
+				else{dataArray[0] = dataRow;}
+				}
 									
 				{
 					try {
@@ -157,11 +159,13 @@ public class CsvChooser extends JPanel implements Serializable {
 					}
 				}
 				try {
+					CsvReader tabela;
 					String a = Csv_File.getSeparator();
+					if(a!=null){
 					char b = a.charAt(0);
-					
-				
-					CsvReader tabela = new CsvReader(csvFilePath, b);
+					tabela = new CsvReader(csvFilePath, b);}
+					else{				
+					tabela = new CsvReader(csvFilePath);}
 					
 					tabela.readHeaders();
 					while (tabela.readRecord()) {
@@ -175,8 +179,29 @@ public class CsvChooser extends JPanel implements Serializable {
 				}
 				
 				Csv_Table.setRow(countRow - 1);
-				String[] dane = Csv_File.removeEmptyField(getDataArray());
-				final JList abcd = new JList(dane);
+				String[] tmp = getDataArray();
+				
+				String[] dane = getDataArray();
+				if(tmp != null){dane = Csv_File.removeEmptyField(getDataArray());}
+				else{BufferedReader CSVFile2 = null;
+				try {
+					CSVFile2 = new BufferedReader(new FileReader(csvFilePath));
+				} catch (FileNotFoundException e2) {
+					e2.printStackTrace();
+				}
+				String dataRow2 = null;
+				try {
+					dataRow2 = CSVFile2.readLine();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					
+				}
+				String[] absc = {dataRow2};
+				dane = absc;
+				setDataArray(absc);
+				}
+				
+				final JList abcd = new JList(getDataArray());
 				abcd.setVisibleRowCount(4);
 				abcd.addListSelectionListener(new ListSelectionListener() {
 					@SuppressWarnings("deprecation")
@@ -200,7 +225,7 @@ public class CsvChooser extends JPanel implements Serializable {
 	}
 
 	public static String[] getDataArray() {
-		return Csv_File.removeEmptyField(dataArray);
+		return dataArray;
 	}
 
 	public static void setDataArray(String[] split) {

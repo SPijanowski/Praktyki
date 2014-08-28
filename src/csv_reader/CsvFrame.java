@@ -140,8 +140,11 @@ public class CsvFrame extends JFrame implements Serializable {
 				String[][] compare = new String[wczyt][test.length];
 				try {
 					String a = CompareCSV.getFirstSeparator();
+					CsvReader tabela;
+					if(a!=null){
 					char b = a.charAt(0);
-					CsvReader tabela = new CsvReader(CompareCSV.getFirstFilePath(), b);
+					tabela = new CsvReader(CompareCSV.getFirstFilePath(), b);}
+					else{tabela = new CsvReader(CompareCSV.getFirstFilePath());}
 					tabela.readHeaders();
 					while (tabela.readRecord()) {
 						for (int i = 0; i < test.length; i++) {
@@ -158,9 +161,11 @@ public class CsvFrame extends JFrame implements Serializable {
 				}
 				try {
 					String a = CompareCSV.getSecondSeparator();
+					CsvReader tabela;
+					if(a!=null){char b = a.charAt(0);
+					tabela = new CsvReader(CompareCSV.getSecondFilePath(), b);}
+					else{tabela = new CsvReader(CompareCSV.getSecondFilePath());}
 					
-					char b = a.charAt(0);
-					CsvReader tabela = new CsvReader(CompareCSV.getSecondFilePath(), b);
 					tabela.readHeaders();
 					while (tabela.readRecord()) {
 						for (int i = 0; i < test.length; i++) {
@@ -461,6 +466,7 @@ public class CsvFrame extends JFrame implements Serializable {
 			}
 			generuj = new JButton("Generuj Tabele");
 			generuj.addActionListener(new ActionListener() {
+		
 				public void actionPerformed(ActionEvent event) {
 					int line_number = 0;
 					int line_number1 = 0;
@@ -468,17 +474,22 @@ public class CsvFrame extends JFrame implements Serializable {
 					String[] test = null;
 					String a = Csv_File.getSeparator();
 					String path = Csv_File.getScvFilePath();
-					char sep = a.charAt(0);
+					char sep = 0;
+					if(a!=null){
+					sep = a.charAt(0);}
+					
 					String[] wybraane = CsvChooser.getSelected();
 					//Sprawdzenie czy użytkownik wybrał dane do wczytania
 					if (wybraane != null) {
 						test = Csv_File.removeEmptyField(wybraane);
-					} else {
-						test = Csv_File.removeEmptyField(CsvChooser.getDataArray());
+					} else {if(a!=null){test = Csv_File.removeEmptyField(CsvChooser.getDataArray());}else{test =CsvChooser.getDataArray();}
+					
 					}
+					
 					try {
 					//Obiczanie wielkości tablicy
-						CsvReader tabela = new CsvReader(path,sep);
+						CsvReader tabela = new CsvReader(path);
+						tabela = new CsvReader(path,sep);
 						tabela.readHeaders();
 						while (tabela.readRecord()) {
 							++line_number;
