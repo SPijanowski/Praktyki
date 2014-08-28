@@ -15,7 +15,7 @@ class ColorCellRenderer extends DefaultTableCellRenderer {
                 comp.setBackground( new Color(176, 196, 222) );
             }
             else {
-                comp.setBackground( new Color(100, 196, 222) );
+                comp.setBackground( new Color(255, 250, 250) );
             }
         }
         return comp;
