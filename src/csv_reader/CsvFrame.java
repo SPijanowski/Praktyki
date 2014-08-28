@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -44,6 +45,7 @@ public class CsvFrame extends JFrame implements Serializable {
 	private int[] nonCopyRow = {};
 	private int[] copyRow = {};
 	private ArrayList<TableColumn> removedColumns;
+	private JFileChooser FC;
 	private static final long serialVersionUID = 2537576951291269546L;
 
 	public CsvFrame() {
@@ -329,7 +331,13 @@ public class CsvFrame extends JFrame implements Serializable {
 						JMenuItem saveFile= new JMenuItem("Zapisz");
 						saveFile.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent event) {
-								String outputFile = "Niepowtarzalny" + Csv_File.csvFileName(CompareCSV.getFirstFilePath()) + Csv_File.csvFileName(CompareCSV.getSecondFilePath());
+								FC = new JFileChooser();
+								FileNameExtensionFilter filter = new FileNameExtensionFilter("Pliki .csv","csv");
+								FC.setFileFilter(filter);
+								int result = FC.showSaveDialog(CsvFrame.this);
+								if(result == JFileChooser.APPROVE_OPTION){
+									String filePath = FC.getSelectedFile().getPath();
+									String outputFile = (filePath+".csv");
 								
 								// before we open the file check to see if it already exists
 								boolean alreadyExists = new File(outputFile).exists();
@@ -364,8 +372,11 @@ public class CsvFrame extends JFrame implements Serializable {
 								} catch (IOException e) {
 									e.printStackTrace();
 								}
+								csvInsert.setForeground(new Color(0, 100, 0));
+								csvInsert.append("Zapisano plik \""+ outputFile +"\"");
 							}
-						});
+								
+							}});
 						popup.add(saveFile);
 						model.setComponentPopupMenu(popup);
 						csvInsert.setComponentPopupMenu(popup);
@@ -421,7 +432,7 @@ public class CsvFrame extends JFrame implements Serializable {
 
 	private class ConnectAction implements ActionListener {
 		private JButton generuj;
-		
+		private JFileChooser FC;
 
 		public void actionPerformed(ActionEvent event) {
 
@@ -460,9 +471,11 @@ public class CsvFrame extends JFrame implements Serializable {
 				int c = b.lastIndexOf("\\");
 				String d = b.substring(c+1);
 				Csv_File.setCsvFileName(d);
+				
 				csvInsert.setForeground(new Color(0, 100, 0));
 				int wczyt = Csv_Table.getRow() + 1;
-				csvInsert.append("GOTOWE! Wczytano plik \"" + Csv_File.getCsvFileName() + "\". Ilość wczytanych danych " + wczyt + " Rekordów;\r\n");
+				csvInsert.append("GOTOWE! Wczytano plik \"" + Csv_File.getCsvFileName() + "\". Ilość wczytanych danych " + wczyt + 
+						" Rekordów;\r\n");
 			}
 			generuj = new JButton("Generuj Tabele");
 			generuj.addActionListener(new ActionListener() {
@@ -618,10 +631,14 @@ public class CsvFrame extends JFrame implements Serializable {
 							removedColumns.clear();
 						}
 					});
+					
 					JMenuItem saveFile= new JMenuItem("Zapisz");
 					saveFile.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
-							String outputFile = "Niepowtarzalny.csv";
+							FC = new JFileChooser();
+							int result = FC.showOpenDialog(CsvFrame.this);
+							if(result == JFileChooser.APPROVE_OPTION){}}
+							/**String outputFile = "Niepowtarzalny.csv";
 							
 							// before we open the file check to see if it already exists
 							boolean alreadyExists = new File(outputFile).exists();
@@ -657,7 +674,7 @@ public class CsvFrame extends JFrame implements Serializable {
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-						}
+						}}*/
 					});
 					popup.add(saveFile);
 					tableMenu.add(showColumnsItem);

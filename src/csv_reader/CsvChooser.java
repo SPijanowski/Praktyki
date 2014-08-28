@@ -35,6 +35,9 @@ public class CsvChooser extends JPanel implements Serializable {
 	private JPanel panel = new JPanel();
 	private JPanel northPanel = new JPanel();
 	public static String[] selected;
+	public static JCheckBox duplicate;
+	public static boolean selec;
+	
 
 	public CsvChooser() {
 		setSize(100, 600);
@@ -44,10 +47,26 @@ public class CsvChooser extends JPanel implements Serializable {
 		setLayout(new BorderLayout());
 
 		// Utworzenie panelu z polami nazwy użytkownika i hasła
-		panel.setLayout(new GridLayout(4, 2));
-		panel.add(new JLabel("Wybierz Plik:"));
-		panel.add(wybierz);
+		panel.setLayout(new GridLayout(2, 1));
+		JPanel panel2 = new JPanel();
+		panel2.add(new JLabel("Wybierz Plik:"));
+		panel2.add(wybierz);
+		panel2.setLayout(new GridLayout(1,2));
+		panel.add(panel2);
+		JPanel buttonPanel2 = new JPanel();
+		buttonPanel2.setLayout(new GridLayout(1,2));
+		final JCheckBox duplicate = new JCheckBox("Usuń duplikaty");
+		duplicate.addItemListener(new ItemListener(){
+			public void itemStateChanged(ItemEvent event){
+				selec = duplicate.isSelected();
+			}
+		});
+		buttonPanel2.add(duplicate);
+		
+		panel.add(buttonPanel2);
 		add(panel, BorderLayout.CENTER);
+		System.out.println(duplicate.isSelected());
+		
 
 		// Utworzenie przycisków OK i Anuluj, które zamykają okno dialogowe
 		okButton = new JButton("Ok");
