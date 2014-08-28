@@ -502,7 +502,7 @@ public class CsvFrame extends JFrame implements Serializable {
 					try {
 					//Obiczanie wielkości tablicy
 						CsvReader tabela = new CsvReader(path);
-						tabela = new CsvReader(path,sep);
+						
 						tabela.readHeaders();
 						while (tabela.readRecord()) {
 							++line_number;
