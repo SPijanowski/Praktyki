@@ -45,6 +45,7 @@ public class CompareCSV extends JPanel {
 	private static String firstFilePath;
 	private static String secondFilePath;
 	private static int selc;
+	private static int selc2;
 
 	private JButton wybierz1;
 
@@ -97,70 +98,13 @@ public class CompareCSV extends JPanel {
 					setFirstFilePath(firstFilePath);
 					// Wybór separatora
 					firstSeparator = Csv_File.separation(firstFilePath);
-					BufferedReader CSVFile = null;
-					try {
-						CSVFile = new BufferedReader(
-								new FileReader(firstFilePath));
-					} catch (FileNotFoundException e2) {
-						e2.printStackTrace();
-					}
-					String dataRow = null;
-					try {
-						dataRow = CSVFile.readLine();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-					if(Csv_File.separation(firstFilePath)!= null){if(Csv_File.separation(firstFilePath)!= null)
-					{setFirstDataArray(dataRow.split(Csv_File.separation(firstFilePath)));}
-					else{String[] zamiennik = {dataRow};
-					setFirstDataArray(zamiennik);}}
-					
-					{
-						try {
-							CSVFile.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-					try {
-						String a = firstSeparator;
-						CsvReader tabela;
-						if(a!=null){
-						char b = a.charAt(0);
-						tabela = new CsvReader(firstFilePath, b);}
-						else{tabela = new CsvReader(firstFilePath);}
-						tabela.readHeaders();
-						while (tabela.readRecord()) {
-							countRow++;
-						}
-						tabela.close();
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					setFirstFileRow(countRow - 1);
-					String[] tmp = firstDataArray;
-					
+					//Wczytanie pierwszego wiersza
+					setFirstDataArray(Csv_File.firstRow(firstFilePath));
+					//Obliczanie wielkości wczytanych danych
+					setFirstFileRow(Csv_File.countRow(firstFilePath) - 1);
+				
 					String[] dane = firstDataArray;
-					if(tmp != null){dane = Csv_File.removeEmptyField(getFirstDataArray());}
-					else{BufferedReader CSVFile2 = null;
-					try {
-						CSVFile2 = new BufferedReader(new FileReader(firstFilePath));
-					} catch (FileNotFoundException e2) {
-						e2.printStackTrace();
-					}
-					String dataRow2 = null;
-					try {
-						dataRow2 = CSVFile2.readLine();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-						
-					}
-					String[] absc = {dataRow2};
-					dane = absc;
-					setFirstDataArray(Csv_File.removeEmptyField(absc));
-					}
+					
 					final JList abcd = new JList(dane);
 					abcd.setVisibleRowCount(4);
 					abcd.addListSelectionListener(new ListSelectionListener() {
@@ -190,6 +134,7 @@ public class CompareCSV extends JPanel {
 		wybierz2.addActionListener(new ActionListener() {
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			public void actionPerformed(ActionEvent event) {
+				selc2 = -1;
 				northPanel.updateUI();
 				countRow = 0;
 				csvFirstFileChooser.setCurrentDirectory(new File("."));
@@ -199,71 +144,17 @@ public class CompareCSV extends JPanel {
 					setSecondFilePath(secondFilePath);
 					// Wybór separatora
 					secondSeparator = Csv_File.separation(secondFilePath);
-					BufferedReader CSVFile = null;
-					try {
-						CSVFile = new BufferedReader(
-								new FileReader(secondFilePath));
-					} catch (FileNotFoundException e2) {
-						e2.printStackTrace();
-					}
-					String dataRow = null;
-					try {
-						dataRow = CSVFile.readLine();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-					if(Csv_File.separation(secondFilePath)!= null){if(Csv_File.separation(secondFilePath)!= null)
-					{setSecondDataArray(dataRow.split(Csv_File.separation(secondFilePath)));}
-					else{secondDataArray[0] = dataRow;}}
-					{
-						try {
-							CSVFile.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-					try {
-						String a = secondSeparator;
-						CsvReader tabela ;
-						if(a!=null){
-						char b = a.charAt(0);
-						tabela = new CsvReader(secondFilePath, b);}
-						else{tabela = new CsvReader(secondFilePath);}
-						tabela.readHeaders();
-						while (tabela.readRecord()) {
-							countRow++;
-						}
-						tabela.close();
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					setSecondFileRow(countRow - 1);
-					String[] tmp = secondDataArray;
-					
+					//Wczytanie pierwszego wiersza
+					setSecondDataArray(Csv_File.firstRow(secondFilePath));
+					//Obliczanie wielkości wczytanych danych
+					setSecondFileRow(Csv_File.countRow(secondFilePath) - 1);
+				
 					String[] dane = secondDataArray;
-					if(tmp != null){dane = Csv_File.removeEmptyField(getSecondDataArray());}
-					else{BufferedReader CSVFile2 = null;
-					try {
-						CSVFile2 = new BufferedReader(new FileReader(secondFilePath));
-					} catch (FileNotFoundException e2) {
-						e2.printStackTrace();
-					}
-					String dataRow2 = null;
-					try {
-						dataRow2 = CSVFile2.readLine();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-						
-					}
-					String[] absc = {dataRow2};
-					dane = absc;
-					setSecondDataArray(Csv_File.removeEmptyField(absc));
-					}
+					
 					final JList abcd = new JList(dane);
 					abcd.setVisibleRowCount(4);
 					abcd.addListSelectionListener(new ListSelectionListener() {
+			
 						@SuppressWarnings("deprecation")
 						public void valueChanged(ListSelectionEvent event) {
 							setSecondFileSelected(null);
@@ -271,6 +162,7 @@ public class CompareCSV extends JPanel {
 							int lenght = values.length;
 							secondFileSelected = new String[lenght];
 							System.arraycopy(values, 0, secondFileSelected, 0, lenght);
+							setSelc2(abcd.getLeadSelectionIndex());
 						}
 					});
 					northPanel.add(new JLabel("Dane pierwszego plik do porównania"));
@@ -310,7 +202,7 @@ public class CompareCSV extends JPanel {
 	}
 
 
-	public String[] getSecondDataArray() {
+	public static String[] getSecondDataArray() {
 		return Csv_File.removeEmptyField(secondDataArray);
 	}
 
@@ -402,5 +294,20 @@ public class CompareCSV extends JPanel {
 	public static String[] getFirstFileSelected() {
 	
 		return firstFileSelected;
+	}
+
+
+	public static String[] getSecondFileSelected() {
+		return secondFileSelected;
+	}
+
+
+	public static int getSelc2() {
+		return selc2;
+	}
+
+
+	public static void setSelc2(int selc2) {
+		CompareCSV.selc2 = selc2;
 	}
 }

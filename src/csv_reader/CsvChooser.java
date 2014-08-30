@@ -65,9 +65,7 @@ public class CsvChooser extends JPanel implements Serializable {
 		
 		panel.add(buttonPanel2);
 		add(panel, BorderLayout.CENTER);
-		System.out.println(duplicate.isSelected());
 		
-
 		// Utworzenie przycisków OK i Anuluj, które zamykają okno dialogowe
 		okButton = new JButton("Ok");
 		okButton.addActionListener(new ActionListener() {
@@ -152,74 +150,12 @@ public class CsvChooser extends JPanel implements Serializable {
 				
 				// Wybór separatora
 				Csv_File.setSeparator(Csv_File.separation(csvFilePath));
-
-				BufferedReader CSVFile = null;
-				try {
-					CSVFile = new BufferedReader(new FileReader(csvFilePath));
-				} catch (FileNotFoundException e2) {
-					e2.printStackTrace();
-				}
-				String dataRow = null;
-				try {
-					dataRow = CSVFile.readLine();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				if(Csv_File.separation(csvFilePath)!= null){if(Csv_File.separation(csvFilePath)!= null)
-				{setDataArray(dataRow.split(Csv_File.separation(csvFilePath)));}
-				else{dataArray[0] = dataRow;}
-				}
-									
-				{
-					try {
-						CSVFile.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				try {
-					CsvReader tabela;
-					String a = Csv_File.getSeparator();
-					if(a!=null){
-					char b = a.charAt(0);
-					tabela = new CsvReader(csvFilePath, b);}
-					else{				
-					tabela = new CsvReader(csvFilePath);}
-					
-					tabela.readHeaders();
-					while (tabela.readRecord()) {
-						countRow++;
-					}
-					tabela.close();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				setDataArray(Csv_File.firstRow(csvFilePath));
+				countRow = Csv_File.countRow(csvFilePath);
 				
 				Csv_Table.setRow(countRow - 1);
-				String[] tmp = getDataArray();
-				
-				String[] dane = getDataArray();
-				if(tmp != null){dane = Csv_File.removeEmptyField(getDataArray());}
-				else{BufferedReader CSVFile2 = null;
-				try {
-					CSVFile2 = new BufferedReader(new FileReader(csvFilePath));
-				} catch (FileNotFoundException e2) {
-					e2.printStackTrace();
-				}
-				String dataRow2 = null;
-				try {
-					dataRow2 = CSVFile2.readLine();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-					
-				}
-				String[] absc = {dataRow2};
-				dane = absc;
-				setDataArray(absc);
-				}
-				
+			
+								
 				final JList abcd = new JList(getDataArray());
 				abcd.setVisibleRowCount(4);
 				abcd.addListSelectionListener(new ListSelectionListener() {
