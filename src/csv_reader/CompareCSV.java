@@ -6,12 +6,7 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -23,8 +18,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import com.csvreader.CsvReader;
 
 public class CompareCSV extends JPanel {
 
@@ -39,7 +32,6 @@ public class CompareCSV extends JPanel {
 	private JDialog compareCsv;
 	private JPanel northPanel = new JPanel();
 	private JFileChooser csvFirstFileChooser;
-	private int countRow;
 	private static String firstSeparator;
 	private static String secondSeparator;
 	private static String firstFilePath;
@@ -90,7 +82,6 @@ public class CompareCSV extends JPanel {
 				northPanel.updateUI();
 				setFirstFileSelected(null);
 				setFirstDataArray(null);
-				countRow = 0;
 				csvFirstFileChooser.setCurrentDirectory(new File("."));
 				int result = csvFirstFileChooser.showOpenDialog(CompareCSV.this);
 				if (result == JFileChooser.APPROVE_OPTION) {
@@ -136,7 +127,6 @@ public class CompareCSV extends JPanel {
 			public void actionPerformed(ActionEvent event) {
 				selc2 = -1;
 				northPanel.updateUI();
-				countRow = 0;
 				csvFirstFileChooser.setCurrentDirectory(new File("."));
 				int result = csvFirstFileChooser.showOpenDialog(CompareCSV.this);
 				if (result == JFileChooser.APPROVE_OPTION) {
@@ -195,12 +185,6 @@ public class CompareCSV extends JPanel {
 	public static int getSelc() {
 		return selc;
 	}
-
-
-	public void setSelc(int selc) {
-		this.selc = selc;
-	}
-
 
 	public static String[] getSecondDataArray() {
 		return Csv_File.removeEmptyField(secondDataArray);

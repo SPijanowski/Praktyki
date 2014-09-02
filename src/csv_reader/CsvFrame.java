@@ -9,10 +9,8 @@ package csv_reader;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
@@ -166,6 +164,18 @@ public class CsvFrame extends JFrame implements Serializable {
 					}
 					petle1++;
 				}
+				petle2 =0;
+				while(petle2 < secondFileTable.length - 1){
+				if (firstFileTable[firstFileTable.length-1][t].equals(secondFileTable[petle2][compareSelected])){
+					pow1++;
+					break;
+				} else {
+					if (petle2 == secondFileTable.length - 2) {
+						inne1++;
+					}
+				}
+				petle2++;}
+			
 				final String[][] niepowtarzalne1 = new String[inne1][firstFileTable[0].length];
 				final String[][] powtarjace = new String[pow1][firstFileTable[0].length];
 				petle1 = 0;
@@ -193,6 +203,21 @@ public class CsvFrame extends JFrame implements Serializable {
 					}
 					petle1++;
 				}
+				petle2 =0;
+				while(petle2 < secondFileTable.length - 1){
+				if (firstFileTable[firstFileTable.length-1][t].equals(secondFileTable[petle2][compareSelected])){
+					for(int i = 0; i < firstFileTable[firstFileTable.length-1].length; i++)
+					{powtarjace[copy][i] = firstFileTable[firstFileTable.length-1][i];}
+					copy++;
+					break;
+				} else {
+					if (petle2 == secondFileTable.length - 2) {
+						for(int i = 0; i < firstFileTable[firstFileTable.length-1].length; i++)
+						{niepowtarzalne1[newDate][i] = firstFileTable[firstFileTable.length-1][i];}
+						newDate++;
+					}
+				}
+				petle2++;}
 
 				final String[][] niepowtarzalne = Csv_File.removeDoubleData(niepowtarzalne1);
 				final String[] nameOfColumns = test;

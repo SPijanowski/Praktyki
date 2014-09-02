@@ -226,6 +226,12 @@ class Csv_File {
 			}
 			petle++;
 		}
+		if (tablicaDanych[tablicaDanych.length-1][0].equals(tablicaDanych[tablicaDanych.length - 2][0]))
+		{
+			pow++;
+		} else {
+			inne++;
+		}
 		String[][] niepowtarzalne = new String[inne][tablicaDanych[0].length];
 		String[][] powtarjace = new String[pow][tablicaDanych[0].length];
 		petle = 0;
@@ -244,6 +250,15 @@ class Csv_File {
 				}
 				powDana++;
 				petle++;
+			}
+		}
+		if (tablicaDanych[tablicaDanych.length - 1][0].equals(tablicaDanych[tablicaDanych.length - 2][0]))
+		{for (int i = 0; i < tablicaDanych[petle].length; i++) {
+			powtarjace[nowaDana][i] = tablicaDanych[petle][i];
+		}
+		} else {
+			for (int i = 0; i < tablicaDanych[petle].length; i++) {
+				niepowtarzalne[powDana][i] = tablicaDanych[petle][i];
 			}
 		}
 		return niepowtarzalne;

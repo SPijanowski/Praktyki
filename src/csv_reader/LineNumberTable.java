@@ -5,7 +5,9 @@ import javax.swing.table.TableColumn;
 
 
 public class LineNumberTable extends JTable {
-    private JTable mainTable;
+
+	private static final long serialVersionUID = -2347482843961067504L;
+	private JTable mainTable;
  
     public LineNumberTable( JTable table ) {
         super();
