@@ -78,6 +78,8 @@ public class CompareCSV extends JPanel {
 
 			@SuppressWarnings({ "unchecked", "rawtypes" })
 			public void actionPerformed(ActionEvent event) {
+				setSelc(0);
+				setSelc2(0);
 				northPanel.removeAll();
 				northPanel.updateUI();
 				setFirstFileSelected(null);
@@ -179,6 +181,12 @@ public class CompareCSV extends JPanel {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"Pliki CSV", "csv");
 		csvFirstFileChooser.setFileFilter(filter);
+	}
+
+
+	public static void setSelc(int i) {
+		CompareCSV.selc = i;
+		
 	}
 
 
