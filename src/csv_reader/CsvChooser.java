@@ -9,7 +9,11 @@ package csv_reader;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Scanner;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -24,13 +28,13 @@ public class CsvChooser extends JPanel implements Serializable {
 	private JDialog dialog;
 	private JFileChooser csvFileChooser;
 	private JButton wybierz;
-	private static String[] dataArray = { "" };
 	private int countRow = 0;
 	private JPanel panel = new JPanel();
 	private JPanel northPanel = new JPanel();
 	public static String[] selected;
 	public static JCheckBox duplicate;
 	public static boolean selec;
+	public static Csv_File file;
 	
 
 	public CsvChooser() {
@@ -70,6 +74,7 @@ public class CsvChooser extends JPanel implements Serializable {
 
 			}
 		});
+		okButton.setEnabled(false);
 
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
@@ -131,54 +136,54 @@ public class CsvChooser extends JPanel implements Serializable {
 	private class fileOpenListener implements ActionListener {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public void actionPerformed(ActionEvent event) {
+			okButton.setEnabled(false);
 			northPanel.removeAll();
 			northPanel.updateUI();
 			setSelected(null);
-			setDataArray(null);
+			file = null;
 			countRow = 0;
 			csvFileChooser.setCurrentDirectory(new File("."));
 			int result = csvFileChooser.showOpenDialog(CsvChooser.this);
 			if (result == JFileChooser.APPROVE_OPTION) {
-				String csvFilePath = csvFileChooser.getSelectedFile().getPath();
-				Csv_File.setCsvFilePath(csvFilePath);
-				
-				// Wybór separatora
-				Csv_File.setSeparator(Csv_File.separation(csvFilePath));
-				setDataArray(Csv_File.firstRow(csvFilePath));
-				countRow = Csv_File.countRow(csvFilePath);
-				
-				Csv_Table.setRow(countRow - 1);
-			
-								
-				final JList abcd = new JList(getDataArray());
-				abcd.setVisibleRowCount(4);
-				abcd.addListSelectionListener(new ListSelectionListener() {
-					@SuppressWarnings("deprecation")
-					public void valueChanged(ListSelectionEvent event) {
-						setSelected(null);
-						Object values[] = abcd.getSelectedValues();
-						int lenght = values.length;
-						selected = new String[lenght];
-						System.arraycopy(values, 0, selected, 0, lenght);
+				final String csvFilePath = csvFileChooser.getSelectedFile().getPath();
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>(){
+					@Override
+					protected Void doInBackground() throws Exception {
+						wybierz.setEnabled(false);
+						countRow = Csv_File.countRow(csvFilePath);
+						file = new Csv_File(csvFilePath, countRow);
+						final JList abcd = new JList(file.getCsvFileFirstRow());
+						abcd.setVisibleRowCount(4);
+						abcd.addListSelectionListener(new ListSelectionListener() {
+							@SuppressWarnings("deprecation")
+							public void valueChanged(ListSelectionEvent event) {
+								setSelected(null);
+								Object values[] = abcd.getSelectedValues();
+								int lenght = values.length;
+								selected = new String[lenght];
+								System.arraycopy(values, 0, selected, 0, lenght);
+							}
+						});
+						JScrollPane scroll = new JScrollPane(abcd);
+						northPanel.add(scroll);
+						add(northPanel, BorderLayout.NORTH);
+						return null;
 					}
-				});
-				JScrollPane scroll = new JScrollPane(abcd);
-				northPanel.add(scroll);
-				add(northPanel, BorderLayout.NORTH);
-				SwingUtilities.updateComponentTreeUI(northPanel);
-				SwingUtilities.updateComponentTreeUI(dialog);
+					@Override
+		            protected void done() {
+						Toolkit.getDefaultToolkit().beep();
+						okButton.setEnabled(true);
+		                wybierz.setEnabled(true);
+		                SwingUtilities.updateComponentTreeUI(northPanel);
+						SwingUtilities.updateComponentTreeUI(dialog);
+										
+		            }
+				};
+				worker.execute();				
 				
 			}
 			
 		}
-	}
-
-	public static String[] getDataArray() {
-		return dataArray;
-	}
-
-	public static void setDataArray(String[] split) {
-		dataArray = split;
 	}
 
 	public static String[] getSelected() {
@@ -188,4 +193,5 @@ public class CsvChooser extends JPanel implements Serializable {
 	public void setSelected(String[] s) {
 		selected = s;
 	}
+
 }

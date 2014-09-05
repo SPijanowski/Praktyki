@@ -9,9 +9,7 @@ package csv_reader;
 
 import java.awt.*;
 import java.awt.event.*;
-
 import java.io.FileNotFoundException;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +17,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import javax.swing.*;
-
 import javax.swing.table.TableColumn;
 
 import com.csvreader.CsvReader;
@@ -38,6 +35,7 @@ public class CsvFrame extends JFrame implements Serializable {
 
 	public static ArrayList<TableColumn> removedColumns;
 	private static final long serialVersionUID = 2537576951291269546L;
+	public static JButton generuj;
 
 	public CsvFrame() {
 		// Tworzenie menu Wczytaj
@@ -376,28 +374,40 @@ public class CsvFrame extends JFrame implements Serializable {
 		}
 	}
 
-	private class ConnectAction implements ActionListener {
-		private JButton generuj;
+	private class ConnectAction extends SwingWorker<Void, Integer> implements
+			ActionListener {
+		
 
 		public void actionPerformed(ActionEvent event) {
 
 			if (dialog == null)
 				dialog = new CsvChooser();
-
-			if (dialog.showDialog(CsvFrame.this, "Wybier Plik")) {
-
-				String path = Csv_File.getScvFilePath();
-				csvInsert.setForeground(new Color(0, 100, 0));
-				int wczyt = Csv_Table.getRow() + 1;
-				csvInsert.append("GOTOWE! Wczytano plik \""
-						+ Csv_File.csvFileName(path)
-						+ "\". Ilość wczytanych danych " + wczyt
-						+ " Rekordów;\r\n");
-			}
-			generuj = GenerateButton.addButton("Generuj");
-			add(generuj, BorderLayout.NORTH);
-
+			if (dialog.showDialog(CsvFrame.this, "Wybier Plik")) {try {
+				doInBackground();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}}
+			
 		}
 
+		@Override
+		protected Void doInBackground() throws Exception {
+			
+				Csv_File file = CsvChooser.file;
+			
+
+				csvInsert.setForeground(new Color(0, 100, 0));
+				int wczyt = file.getCsvFileRows();
+				csvInsert.append("GOTOWE! Wczytano plik \""
+						+ file.getCsvFileName()
+						+ "\". Ilość wczytanych danych " + wczyt
+						+ " Rekordów;\r\n");
+			
+			generuj = GenerateButton.addButton("Generuj",file);
+			add(generuj, BorderLayout.NORTH);
+			return null;
+		}
+		
 	}
+	
 }

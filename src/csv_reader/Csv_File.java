@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.swing.SwingWorker;
+
 import com.csvreader.CsvReader;
 
 /**
@@ -21,45 +23,22 @@ import com.csvreader.CsvReader;
 
 class Csv_File {
 
-	private static String separator;
-	private static String csvFilePath;
-	private static String csvFileName;
+	private String separator;
+	private String csvFilePath;
+	private String csvFileName;
+	private String[] csvFileFirstRow;
+	private String[][] csvFileTableModel;
+	private int csvFileRows;
 
-	public Csv_File(String name, String separation, String path) {
+	public Csv_File(String path, int row) {
 		csvFilePath = path;
+		csvFileName = separation(path);
+		csvFileName = csvFileName(path);
+		csvFileFirstRow = (removeEmptyField(firstRow(path)));
+		csvFileRows = row;
+		setCsvFileTableModel(null);
 	}
 
-	public Csv_File(String f) {
-		csvFilePath = f;
-	}
-
-	public String getNazwa() {
-		return csvFileName;
-	}
-
-	public static String getSeparator() {
-		return separator;
-	}
-
-	public static String getScvFilePath() {
-		return csvFilePath;
-	}
-
-	public static void setSeparator(String s) {
-		separator = s;
-	}
-
-	public static void setCsvFilePath(String f) {
-		csvFilePath = f;
-	}
-	
-	public static String getCsvFileName() {
-		return csvFileName;
-	}
-
-	public static void setCsvFileName(String csvFileName) {
-		Csv_File.csvFileName = csvFileName;
-	}
 
 	public static String separation(String path) {
 		String dataArray[];
@@ -129,22 +108,35 @@ class Csv_File {
 		a = list.toArray(new String[list.size()]);
 		return a;
 	}
-	
-	public static String[][] readData(String path, String[] firstRow){
+
+	public void readData(final Csv_File file, final String[] firstRow) {
+		String[][] tablicaDanych = null;
+		
+		final String path = file.getCsvFilePath();
+		SwingWorker<String[][], Void> worker = new SwingWorker<String[][], Void>(){
+		@Override
+		protected String[][] doInBackground() throws Exception {
 		String l = null;
-		int danetablica; 
-		if(firstRow != null){ danetablica = firstRow.length;}else{danetablica = 1; }
+		int danetablica;
+		if (firstRow != null) {
+			danetablica = firstRow.length;
+		} else {
+			danetablica = 1;
+		}
 		int line_numberFirstFile = countRow(path);
 		int line_number = 0;
-	
+
 		String[][] tablicaDanych = new String[line_numberFirstFile][danetablica];
-		try {
+		
+			try {
 			String a = Csv_File.separation(path);
 			CsvReader tabela;
-			if(a!=null){
-			char b = a.charAt(0);
-			tabela = new CsvReader(path, b);}
-			else{tabela = new CsvReader(path);}
+			if (a != null) {
+				char b = a.charAt(0);
+				tabela = new CsvReader(path, b);
+			} else {
+				tabela = new CsvReader(path);
+			}
 			tabela.readHeaders();
 			while (tabela.readRecord()) {
 				for (int i = 0; i < danetablica; i++) {
@@ -159,18 +151,68 @@ class Csv_File {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return tablicaDanych;		
-	}
+		
+		return file.setCsvFileTableModel(tablicaDanych);}
+		
+		@Override
+        protected void done() 
+		{CsvFrame.generuj.setEnabled(true);}
+	};
+	worker.execute();
 	
-	public static int countRow(String path)
-	{	int countRow = 0;
+		
+	
+	}
+	public static String[][] readData(final String path, final String[] firstRow) {
+		String l = null;
+		int danetablica;
+		if (firstRow != null) {
+			danetablica = firstRow.length;
+		} else {
+			danetablica = 1;
+		}
+		int line_numberFirstFile = countRow(path);
+		int line_number = 0;
+
+		String[][] tablicaDanych = new String[line_numberFirstFile][danetablica];
+		
+			try {
+			String a = Csv_File.separation(path);
+			CsvReader tabela;
+			if (a != null) {
+				char b = a.charAt(0);
+				tabela = new CsvReader(path, b);
+			} else {
+				tabela = new CsvReader(path);
+			}
+			tabela.readHeaders();
+			while (tabela.readRecord()) {
+				for (int i = 0; i < danetablica; i++) {
+					l = tabela.get(firstRow[i]);
+					tablicaDanych[line_number][i] = (l);
+				}
+				++line_number;
+			}
+			tabela.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+			return tablicaDanych;
+}
+
+	public static int countRow(String path) {
+		int countRow = 0;
 		try {
 			String a = Csv_File.separation(path);
 			CsvReader tabela;
-			if(a!=null){
-			char b = a.charAt(0);
-			tabela = new CsvReader(path, b);}
-			else{tabela = new CsvReader(path);}
+			if (a != null) {
+				char b = a.charAt(0);
+				tabela = new CsvReader(path, b);
+			} else {
+				tabela = new CsvReader(path);
+			}
 			tabela.readHeaders();
 			while (tabela.readRecord()) {
 				countRow++;
@@ -183,10 +225,9 @@ class Csv_File {
 		}
 		return countRow;
 	}
-	
 
 	@SuppressWarnings("resource")
-	public static String[] firstRow(String csvFilePath){
+	public static String[] firstRow(String csvFilePath) {
 		BufferedReader CSVFile = null;
 		try {
 			CSVFile = new BufferedReader(new FileReader(csvFilePath));
@@ -199,12 +240,16 @@ class Csv_File {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		if(Csv_File.separation(csvFilePath)!= null)
-		{String fileRow[] = dataRow.split(Csv_File.separation(csvFilePath)); return fileRow;}
-		else {String fileRow[] = {dataRow}; return fileRow;}
+		if (Csv_File.separation(csvFilePath) != null) {
+			String fileRow[] = dataRow.split(Csv_File.separation(csvFilePath));
+			return fileRow;
+		} else {
+			String fileRow[] = { dataRow };
+			return fileRow;
+		}
 	}
-	
-	public static String[][] removeDoubleData(String[][] tablicaDanych){
+
+	public static String[][] removeDoubleData(String[][] tablicaDanych) {
 		Arrays.sort(tablicaDanych, new Comparator<String[]>() {
 			@Override
 			public int compare(final String[] entry1, final String[] entry2) {
@@ -217,7 +262,7 @@ class Csv_File {
 		int petle = 0;
 		int inne = 0;
 		int pow = 0;
-		
+
 		while (petle < tablicaDanych.length - 1) {
 			if (tablicaDanych[petle][0].equals(tablicaDanych[petle + 1][0])) {
 				pow++;
@@ -226,8 +271,8 @@ class Csv_File {
 			}
 			petle++;
 		}
-		if (tablicaDanych[tablicaDanych.length-1][0].equals(tablicaDanych[tablicaDanych.length - 2][0]))
-		{
+		if (tablicaDanych[tablicaDanych.length - 1][0]
+				.equals(tablicaDanych[tablicaDanych.length - 2][0])) {
 			pow++;
 		} else {
 			inne++;
@@ -252,10 +297,11 @@ class Csv_File {
 				petle++;
 			}
 		}
-		if (tablicaDanych[tablicaDanych.length - 1][0].equals(tablicaDanych[tablicaDanych.length - 2][0]))
-		{for (int i = 0; i < tablicaDanych[petle].length; i++) {
-			powtarjace[nowaDana][i] = tablicaDanych[petle][i];
-		}
+		if (tablicaDanych[tablicaDanych.length - 1][0]
+				.equals(tablicaDanych[tablicaDanych.length - 2][0])) {
+			for (int i = 0; i < tablicaDanych[petle].length; i++) {
+				powtarjace[nowaDana][i] = tablicaDanych[petle][i];
+			}
 		} else {
 			for (int i = 0; i < tablicaDanych[petle].length; i++) {
 				niepowtarzalne[powDana][i] = tablicaDanych[petle][i];
@@ -263,5 +309,58 @@ class Csv_File {
 		}
 		return niepowtarzalne;
 	}
-	
+
+	public String[] getCsvFileFirstRow() {
+		return csvFileFirstRow;
+	}
+
+	public void setCsvFileFirstRow(String[] csvFileFirstRow) {
+		this.csvFileFirstRow = csvFileFirstRow;
+	}
+
+	public int getCsvFileRows() {
+		return csvFileRows;
+	}
+
+	public void setCsvFileRows(int csvFileRows) {
+		this.csvFileRows = csvFileRows;
+	}
+
+	public String getNazwa() {
+		return csvFileName;
+	}
+
+	public String getSeparator() {
+		return separator;
+	}
+
+	public String getCsvFilePath() {
+		return csvFilePath;
+	}
+
+	public void setSeparator(String s) {
+		separator = s;
+	}
+
+	public void setCsvFilePath(String f) {
+		csvFilePath = f;
+	}
+
+	public String getCsvFileName() {
+		return csvFileName;
+	}
+
+	public void setCsvFileName(String acsvFileName) {
+		csvFileName = acsvFileName;
+	}
+
+
+	public String[][] getCsvFileTableModel() {
+		return csvFileTableModel;
+	}
+
+
+	public String[][] setCsvFileTableModel(String[][] csvFileTableModel) {
+		return this.csvFileTableModel = csvFileTableModel;
+	}
 }

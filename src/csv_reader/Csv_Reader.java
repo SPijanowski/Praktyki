@@ -19,7 +19,7 @@ public class Csv_Reader {
 	            public void run()
 	            {
 	               setframe(new CsvFrame());
-	               frame.setTitle("Csv_Reader Version 2.50");      
+	               frame.setTitle("Csv_Reader Version 2.60");      
 	               frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	               frame.setVisible(true);
 	               frame.setSize(1000, 500);

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -19,35 +20,36 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import com.csvreader.CsvWriter;
 
-public class GenerateButton{
+public class GenerateButton {
 
-	public static JButton addButton(String name) {
+	public static JButton addButton(String name, final Csv_File file) {
 		final JButton generuj = new JButton(name);
 		generuj.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent event) {
-
+				
 				final String[] test;
-				String path = Csv_File.getScvFilePath();
+				String path = file.getCsvFilePath();
 
 				String[] wybraane = CsvChooser.getSelected();
 				if (wybraane != null) {
 					String[] test1 = Csv_File.removeEmptyField(wybraane);
 					test = test1;
 				} else {
-					String[] test1 = Csv_File.removeEmptyField(CsvChooser
-							.getDataArray());
+					String[] test1 = file.getCsvFileFirstRow();
 					test = test1;
 				}
-
-				String[][] daneWczytane;
-				String[][] date = Csv_File.readData(path, test);
+		
+				String[][] daneWczytane = Csv_File.readData(path, test);
+				String[][] date = daneWczytane = Csv_File.readData(path, test);
+				
 				if (CsvChooser.selec) {
 					daneWczytane = Csv_File.removeDoubleData(date);
 					CsvFrame.csvInsert
@@ -60,8 +62,7 @@ public class GenerateButton{
 
 				// Tworzenie modelu tabeli
 
-				JInternalFrame listFrame = new JInternalFrame(Csv_File
-						.csvFileName(path), true, true, true, true);
+				JInternalFrame listFrame = new JInternalFrame(file.getCsvFileName(), true, true, true, true);
 				final JTable model = new JTable(tablicaDanych, test);
 				model.setAutoCreateRowSorter(true);
 				model.setDefaultRenderer(Object.class, new ColorCellRenderer());
@@ -222,6 +223,7 @@ public class GenerateButton{
 
 			}
 		});
+		
 		return generuj;
 
 	}
@@ -418,4 +420,5 @@ public class GenerateButton{
 		});
 		return generuj;
 	}
+
 }
