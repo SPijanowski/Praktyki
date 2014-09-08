@@ -423,7 +423,7 @@ public class CsvFrame extends JFrame implements Serializable {
 					String firstFilePath = CompareCSV.getFirstFilePath();
 					String secondFilePath = CompareCSV.getSecondFilePath();
 					int f1 = CompareCSV.firstSelectedArrayInt[0];
-					int s1 = CompareCSV.secondSelectedArrayInt[1];
+					int s1 = CompareCSV.firstSelectedArrayInt[1];
 					int f2 = CompareCSV.secondSelectedArrayInt[0];
 					int s2 = CompareCSV.secondSelectedArrayInt[1];
 					compareSelected = f2;
@@ -432,11 +432,7 @@ public class CsvFrame extends JFrame implements Serializable {
 					String[][] secondFileTable = Csv_File.readData(
 							secondFilePath, test2);
 					// Sprawdzanie poprawności według kolumn
-					int wybr = f1;
-					int t = 0;
-					if (wybr != -1) {
-						t = wybr;
-					}
+					
 
 					int petle1 = 0;
 					int pow1 = 0;
@@ -449,8 +445,8 @@ public class CsvFrame extends JFrame implements Serializable {
 								inne1++;
 								break;
 							}
-							if (firstFileTable[petle1][f1].equals(secondFileTable[petle2][f2])&&
-								firstFileTable[petle1][s1].equals(secondFileTable[petle2][s2])	) {
+							if ((firstFileTable[petle1][f1].equals(secondFileTable[petle2][f2])&&
+								firstFileTable[petle1][s1].equals(secondFileTable[petle2][s2]))) {
 								pow1++;
 								break;
 							}
@@ -464,8 +460,8 @@ public class CsvFrame extends JFrame implements Serializable {
 							inne1++;
 							break;
 						}
-						if (firstFileTable[firstFileTable.length - 1][f1].equals(secondFileTable[petle2][f2])&&
-							firstFileTable[firstFileTable.length - 1][s1].equals(secondFileTable[petle2][s2])) {
+						if ((firstFileTable[firstFileTable.length - 1][f1].equals(secondFileTable[petle2][f2])&&
+							firstFileTable[firstFileTable.length - 1][s1].equals(secondFileTable[petle2][s2]))) {
 							pow1++;
 							break;
 						}
@@ -488,11 +484,12 @@ public class CsvFrame extends JFrame implements Serializable {
 								newDate++;
 								break;
 							}
-							if (firstFileTable[petle1][f1].equals(secondFileTable[petle2][f2])&&
-								firstFileTable[petle1][s1].equals(secondFileTable[petle2][s2])	) {
+							if ((firstFileTable[petle1][f1].equals(secondFileTable[petle2][f2])&&
+								firstFileTable[petle1][s1].equals(secondFileTable[petle2][s2]))) {
 								// Usuwa powtarzajaco dana
 								for (int i = 0; i < firstFileTable[petle1].length; i++) {
 									powtarjace[copy][i] = firstFileTable[petle1][i];
+									
 								}
 								copy++;
 								break;
@@ -510,10 +507,12 @@ public class CsvFrame extends JFrame implements Serializable {
 							newDate++;
 							break;
 						}
-						if (firstFileTable[petle1][f1].equals(secondFileTable[petle2][f2])&&
-							firstFileTable[petle1][s1].equals(secondFileTable[petle2][s2])	) {
+						
+						if ((firstFileTable[petle1][f1].equals(secondFileTable[petle2][f2])&&
+							firstFileTable[petle1][s1].equals(secondFileTable[petle2][s2]))) {
 							for (int i = 0; i < firstFileTable[firstFileTable.length - 1].length; i++) {
 								powtarjace[copy][i] = firstFileTable[firstFileTable.length - 1][i];
+						
 							}
 							copy++;
 							break;
