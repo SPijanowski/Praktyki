@@ -27,8 +27,11 @@ import java.io.File;
 
 import javax.swing.JList;
 import javax.swing.JComboBox;
+
 import java.awt.Font;
+
 import javax.swing.JSeparator;
+
 import java.awt.Color;
 
 public class CompareTwoCsv extends JPanel {
@@ -53,7 +56,10 @@ public class CompareTwoCsv extends JPanel {
 	private static String[] secondDataArray;
 	private static int firstFileRow;
 	private static int secondFileRow;
-
+	private JComboBox firstFileFirstColumn = new JComboBox();
+	private JComboBox firstFileSecondColumn = new JComboBox();
+	private JComboBox secondFileFirstColumn = new JComboBox();
+	private JComboBox secondFileSecondColumn = new JComboBox();
 
 	
 	public CompareTwoCsv() {
@@ -72,7 +78,7 @@ public class CompareTwoCsv extends JPanel {
 				SwingUtilities.updateComponentTreeUI(Csv_Reader.frame);
 			}
 		});
-		okButton.setEnabled(false);
+	
 		
 		JButton btnNewButton_1 = new JButton("Cancel");
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -81,6 +87,7 @@ public class CompareTwoCsv extends JPanel {
 			}
 		});
 		
+
 		
 		JLabel lblNewLabel = new JLabel("Porównanie plików CSV");
 		lblNewLabel.setFont(lblNewLabel.getFont().deriveFont(lblNewLabel.getFont().getStyle() | Font.BOLD, lblNewLabel.getFont().getSize() + 5f));
@@ -88,16 +95,10 @@ public class CompareTwoCsv extends JPanel {
 		JLabel label = new JLabel("Dane pierwszego pliku");
 		label.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		JComboBox firstFileFirstColumn = new JComboBox();
 		
-		JComboBox firstFileSecondColumn = new JComboBox();
-		
-		JComboBox secondFileFirstColumn = new JComboBox();
-		
-		JComboBox secondFileSecondColumn = new JComboBox();
 		
 		JLabel label_1 = new JLabel("Dane drugiego pliku");
-		label_1.setFont(label_1.getFont().deriveFont(label_1.getFont().getStyle() | Font.BOLD));
+		label_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 		final JButton wybierz1 = new JButton("Wybierz pierwszy plik");
 		wybierz1.addActionListener(new ActionListener() {
 			
@@ -110,15 +111,7 @@ public class CompareTwoCsv extends JPanel {
 					firstFilePath = csvFirstFileChooser.getSelectedFile()
 							.getPath();
 					setFirstFilePath(firstFilePath);
-					wybierz1.setEnabled(false);
-					SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-						
-						
-						@SuppressWarnings({ "unchecked", "rawtypes" })
-						@Override
-						protected Void doInBackground() throws Exception {
-							btnWybierzDrugiPlik.setEnabled(true);
-							okButton.setEnabled(false);
+					
 							// Wybór separatora
 							firstSeparator = Csv_File.separation(firstFilePath);
 							// Wczytanie pierwszego wiersza
@@ -126,34 +119,10 @@ public class CompareTwoCsv extends JPanel {
 							// Obliczanie wielkości wczytanych danych
 							setFirstFileRow(Csv_File.countRow(firstFilePath) - 1);
 
-							String[] dane = firstDataArray;
-
-						final JList list = new JList(dane);
-							list.setVisibleRowCount(4);
-							list.addListSelectionListener(new ListSelectionListener() {
-								@SuppressWarnings("deprecation")
-								public void valueChanged(ListSelectionEvent event) {
-									setFirstFileSelected(null);
-									Object values[] = list.getSelectedValues();
-									int lenght = values.length;
-									firstFileSelected = new String[lenght];
-									System.arraycopy(values, 0, firstFileSelected, 0,
-											lenght);
-									selc = list.getLeadSelectionIndex();
-								}
-							}); 
-						
-							btnWybierzDrugiPlik.setEnabled(true);
-							return null;}
-						protected void done(){
-							
-							wybierz1.setEnabled(true);
-							Toolkit.getDefaultToolkit().beep();
-							
-						}};
-					worker.execute();
-				}
-				}
+							new Thread(new ComboBoxChanger(firstFileFirstColumn, firstDataArray)).start();
+							new Thread(new ComboBoxChanger(firstFileSecondColumn, firstDataArray)).start();
+											
+				}}
 			});
 		
 		final JButton wybierz2 = new JButton("Wybierz drugi plik");
@@ -168,10 +137,7 @@ public class CompareTwoCsv extends JPanel {
 					secondFilePath = csvFirstFileChooser.getSelectedFile()
 							.getPath();
 					setSecondFilePath(secondFilePath);
-					SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-						@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
-						@Override
-						protected Void doInBackground() throws Exception {
+					
 							// Wybór separatora
 							secondSeparator = Csv_File
 									.separation(secondFilePath);
@@ -181,38 +147,9 @@ public class CompareTwoCsv extends JPanel {
 							// Obliczanie wielkości wczytanych danych
 							setSecondFileRow(Csv_File.countRow(secondFilePath) - 1);
 
-							String[] dane = secondDataArray;
-
-							final JList abcd = new JList(dane);
-							abcd.setVisibleRowCount(4);
-							abcd.addListSelectionListener(new ListSelectionListener() {
-
-								@SuppressWarnings("deprecation")
-								public void valueChanged(
-										ListSelectionEvent event) {
-									setSecondFileSelected(null);
-									Object values[] = abcd.getSelectedValues();
-									int lenght = values.length;
-									secondFileSelected = new String[lenght];
-									System.arraycopy(values, 0,
-											secondFileSelected, 0, lenght);
-									setSelc2(abcd.getLeadSelectionIndex());
-								}
-							});
-
-							JScrollPane scroll = new JScrollPane(abcd);
-							return null;
-						}
-
-						@Override
-						protected void done() {
-							Toolkit.getDefaultToolkit().beep();
-							okButton.setEnabled(true);
-							wybierz2.setEnabled(false);
-						}
-					};
-					worker.execute();
-					}
+							new Thread(new ComboBoxChanger(secondFileFirstColumn, secondDataArray)).start();
+							new Thread(new ComboBoxChanger(secondFileSecondColumn, secondDataArray)).start();				
+				}
 				}
 			});
 		
