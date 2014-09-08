@@ -39,6 +39,9 @@ public class CompareCSV extends JPanel {
 	private static String secondSeparator;
 	private static String firstFilePath;
 	private static String secondFilePath;
+	public static int[] secondSelectedArrayInt;
+	public static int[] firstSelectedArrayInt;
+
 	private static int selc;
 	private static int selc2;
 
@@ -107,7 +110,7 @@ public class CompareCSV extends JPanel {
 							// Obliczanie wielkości wczytanych danych
 							setFirstFileRow(Csv_File.countRow(firstFilePath) - 1);
 
-							String[] dane = firstDataArray;
+							String[] dane = Csv_File.removeEmptyField(firstDataArray);
 
 							final JList abcd = new JList(dane);
 							abcd.setVisibleRowCount(4);
@@ -121,6 +124,7 @@ public class CompareCSV extends JPanel {
 									System.arraycopy(values, 0, firstFileSelected, 0,
 											lenght);
 									selc = abcd.getLeadSelectionIndex();
+									firstSelectedArrayInt = abcd.getSelectedIndices();;
 								}
 							});
 							northPanel.add(new JLabel(
@@ -171,6 +175,8 @@ public class CompareCSV extends JPanel {
 							abcd.setVisibleRowCount(4);
 							abcd.addListSelectionListener(new ListSelectionListener() {
 
+								
+
 								@SuppressWarnings("deprecation")
 								public void valueChanged(
 										ListSelectionEvent event) {
@@ -181,6 +187,7 @@ public class CompareCSV extends JPanel {
 									System.arraycopy(values, 0,
 											secondFileSelected, 0, lenght);
 									setSelc2(abcd.getLeadSelectionIndex());
+									secondSelectedArrayInt = abcd.getSelectedIndices();;
 								}
 							});
 							northPanel.add(new JLabel(
@@ -333,4 +340,20 @@ public class CompareCSV extends JPanel {
 	public static void setSelc2(int selc2) {
 		CompareCSV.selc2 = selc2;
 	}
+	public static int[] getSecondSelectedArrayInt() {
+		return secondSelectedArrayInt;
+	}
+
+	public static void setSecondSelectedArrayInt(int[] secondSelectedArrayInt) {
+		CompareCSV.secondSelectedArrayInt = secondSelectedArrayInt;
+	}
+
+	public static int[] getFirstSelectedArrayInt() {
+		return firstSelectedArrayInt;
+	}
+
+	public static void setFirstSelectedArrayInt(int[] firstSelectedArrayInt) {
+		CompareCSV.firstSelectedArrayInt = firstSelectedArrayInt;
+	}
+
 }

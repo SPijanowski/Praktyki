@@ -271,12 +271,13 @@ class Csv_File {
 			}
 			petle++;
 		}
+		if(!(tablicaDanych.length==0)){
 		if (tablicaDanych[tablicaDanych.length - 1][0]
 				.equals(tablicaDanych[tablicaDanych.length - 2][0])) {
 			pow++;
 		} else {
 			inne++;
-		}
+		}}
 		String[][] niepowtarzalne = new String[inne][tablicaDanych[0].length];
 		String[][] powtarjace = new String[pow][tablicaDanych[0].length];
 		petle = 0;

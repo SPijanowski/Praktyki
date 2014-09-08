@@ -47,8 +47,8 @@ public class GenerateButton {
 					test = test1;
 				}
 		
-				String[][] daneWczytane = Csv_File.readData(path, test);
-				String[][] date = daneWczytane = Csv_File.readData(path, test);
+				String[][] date = Csv_File.readData(path, test);
+				String[][] daneWczytane;
 				
 				if (CsvChooser.selec) {
 					daneWczytane = Csv_File.removeDoubleData(date);
