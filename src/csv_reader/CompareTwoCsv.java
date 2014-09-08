@@ -40,7 +40,6 @@ public class CompareTwoCsv extends JPanel {
 	private boolean ok;
 	private JDialog dialog;
 	private JButton okButton;
-	private JButton btnWybierzDrugiPlik;
 	private JFileChooser csvFirstFileChooser;
 	public static String firstFilePath;
 	
@@ -51,7 +50,10 @@ public class CompareTwoCsv extends JPanel {
 	private static int selc2;
 	public static String[] firstFileSelected;
 	public static String[] secondFileSelected;
-
+	public static int f1;
+	public static int s1;
+	public static int f2;
+	public static int s2;
 	private static String[] firstDataArray;
 	private static String[] secondDataArray;
 	private static int firstFileRow;
@@ -120,8 +122,18 @@ public class CompareTwoCsv extends JPanel {
 							setFirstFileRow(Csv_File.countRow(firstFilePath) - 1);
 
 							new Thread(new ComboBoxChanger(firstFileFirstColumn, firstDataArray)).start();
+							firstFileFirstColumn.addActionListener (new ActionListener () {
+							    public void actionPerformed(ActionEvent e) {
+							    	f1 = firstFileFirstColumn.getSelectedIndex();
+							   }
+							});
+							
 							new Thread(new ComboBoxChanger(firstFileSecondColumn, firstDataArray)).start();
-											
+							firstFileSecondColumn.addActionListener (new ActionListener () {
+							    public void actionPerformed(ActionEvent e) {
+							    	s1 = firstFileSecondColumn.getSelectedIndex();
+							   }
+							});			
 				}}
 			});
 		
@@ -148,7 +160,17 @@ public class CompareTwoCsv extends JPanel {
 							setSecondFileRow(Csv_File.countRow(secondFilePath) - 1);
 
 							new Thread(new ComboBoxChanger(secondFileFirstColumn, secondDataArray)).start();
-							new Thread(new ComboBoxChanger(secondFileSecondColumn, secondDataArray)).start();				
+							secondFileFirstColumn.addActionListener (new ActionListener () {
+							    public void actionPerformed(ActionEvent e) {
+							    	f2 = secondFileFirstColumn.getSelectedIndex();
+							   }
+							});
+							new Thread(new ComboBoxChanger(secondFileSecondColumn, secondDataArray)).start();
+							secondFileSecondColumn.addActionListener (new ActionListener () {
+							    public void actionPerformed(ActionEvent e) {
+							    	s2  = secondFileSecondColumn.getSelectedIndex();
+							   }
+							});
 				}
 				}
 			});

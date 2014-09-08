@@ -3,8 +3,8 @@ package csv_reader;
 /**
  * Program umożliwijący czytanie plików CSV
  * @author Sylwester Pijanowski
- * @version 1.20
- * @date 04.08.2014
+ * @version 2.80
+ * @date 09.09.2014
  */
 
 import java.awt.*;
@@ -73,12 +73,9 @@ public class CsvFrame extends JFrame implements Serializable {
 		mbar.add(advancedMenu);
 
 		// Opcje zaawansowane
-		JMenuItem advancedCompare = new JMenuItem("Porównywanie dwóch");
+		JMenuItem advancedCompare = new JMenuItem("Porównywanie dwóch plików CSV");
 		advancedCompare.addActionListener(new AdvancedCompare());
 		advancedMenu.add(advancedCompare);
-		JMenuItem advancedCompareTest = new JMenuItem("Porównywanie dwóch Test");
-		advancedCompareTest.addActionListener(new AdvancedCompareTest());
-		advancedMenu.add(advancedCompareTest);
 		// Tworzenie logu oraz puliptu
 		desktop = new JDesktopPane();
 		desktop.setBackground(new Color(176, 196, 222));
@@ -412,22 +409,23 @@ public class CsvFrame extends JFrame implements Serializable {
 		}
 	}
 
+
 	private class AdvancedCompare implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
-			if (advancedCompareTwoCsv == null)
-				advancedCompareTwoCsv = new CompareCSV();
-			if (advancedCompareTwoCsv.showDialog(CsvFrame.this, "Wybierz Plik")) {
-				String[] test = CompareCSV.getFirstDataArray();
-				String[] test2 = CompareCSV.getSecondDataArray();
-				int compareSelected = CompareCSV.getSelc2();
+			if (advancedCompareTwoCsvTest == null)
+				advancedCompareTwoCsvTest = new CompareTwoCsv();
+			if (advancedCompareTwoCsvTest.showDialog(CsvFrame.this, "Wybierz Plik")) {
+				String[] test = CompareTwoCsv.getFirstDataArray();
+				String[] test2 = CompareTwoCsv.getSecondDataArray();
+				int compareSelected = CompareTwoCsv.f2;
 				if (compareSelected != -1) {
-					String firstFilePath = CompareCSV.getFirstFilePath();
-					String secondFilePath = CompareCSV.getSecondFilePath();
-					int f1 = CompareCSV.firstSelectedArrayInt[0];
-					int s1 = CompareCSV.firstSelectedArrayInt[1];
-					int f2 = CompareCSV.secondSelectedArrayInt[0];
-					int s2 = CompareCSV.secondSelectedArrayInt[1];
+					String firstFilePath = CompareTwoCsv.getFirstFilePath();
+					String secondFilePath = CompareTwoCsv.getSecondFilePath();
+					int f1 = CompareTwoCsv.f1;
+					int s1 = CompareTwoCsv.s1;
+					int f2 = CompareTwoCsv.f2;
+					int s2 = CompareTwoCsv.s2;
 					compareSelected = f2;
 					String[][] firstFileTable = Csv_File.readData(
 							firstFilePath, test);
@@ -545,20 +543,12 @@ public class CsvFrame extends JFrame implements Serializable {
 									+ "\r\nUsunięto powtórzenia wewnątrz pliku; Wczytanych danych: "
 									+ niepowtarzalne.length + ";\r\n");
 					generuj = GenerateButton.addButton("Generuj Tabele",
-							niepowtarzalne, powtarjace, nameOfColumns);
+							niepowtarzalne, powtarjace, nameOfColumns,firstFilePath,secondFilePath);
 
 					add(generuj, BorderLayout.NORTH);
 
-				}
+				
+				
 			}
-		}
-
-	}
-	private class AdvancedCompareTest implements ActionListener {
-
-		public void actionPerformed(ActionEvent arg0) {
-			if (advancedCompareTwoCsvTest == null)
-				advancedCompareTwoCsvTest = new CompareTwoCsv();
-			if (advancedCompareTwoCsvTest.showDialog(CsvFrame.this, "Wybierz Plik")) {}
 		}}
-}
+}}

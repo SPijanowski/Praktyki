@@ -18,7 +18,7 @@ public class Csv_Reader {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				setframe(new CsvFrame());
-				frame.setTitle("Csv_Reader Version 2.70");
+				frame.setTitle("Csv_Reader Version 2.80");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
 				frame.setSize(1000, 500);

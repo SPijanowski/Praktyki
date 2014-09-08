@@ -1,11 +1,13 @@
 Wstęp
 Program umożliwiający czytanie plików CSV
-Wersja 2.00 z dnia 27.08.2014
+Wersja 2.80 z dnia 09.09.2014
 
-Nowości w porównaniu z wersją 1.50
-Możliwość wyszukiwania duplikatów w plikach CSV(Aktualnie w tym samym pliku lub plikach które posiadają takie same dane początkowe);
-Generowanie tabel zawierających dane i duplikaty;
-Możliwość zapisywania tabeli z niedublującymi się elementami(Wersja testowa - plik wyjścia Niepowtarzajace+Nawyplików); 
+Nowości w porównaniu z wersją 2.50
+Możliwość wyszukiwania duplikatów w plikach CSV o różnych ilościach kolumn;
+Możliwość zapisywania danych gdzie podamy miejsce początkowe;
+Dodane ikona;
+Ulepszono system wprowadzania danych;
+ 
 
 Źródło kodu na edycje tabeli
 Core Java Techniki zaawansowane wydanie VIII wydawnictwo Helion
