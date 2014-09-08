@@ -59,4 +59,6 @@ Core Java Techniki zaawansowane wydanie VIII wydawnictwo Helion
 Numerowanie wierszy i kolor wierszy
 Źródło: http://xis.schowek.net/2009/03/11/upiekszanie-jtable/
 
+Ikona pliku
+licencja: http://creativecommons.org/licenses/by-nc-nd/3.0/
 
