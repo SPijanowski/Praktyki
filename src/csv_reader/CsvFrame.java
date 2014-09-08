@@ -32,6 +32,7 @@ public class CsvFrame extends JFrame implements Serializable {
 	private CsvChooser dialog = null;
 	private CompareCSV compareCsv;
 	private CompareCSV advancedCompareTwoCsv;
+	private CompareTwoCsv advancedCompareTwoCsvTest;
 	public static JDesktopPane desktop;
 
 	public static ArrayList<TableColumn> removedColumns;
@@ -67,14 +68,17 @@ public class CsvFrame extends JFrame implements Serializable {
 			}
 		});
 		insertMenu.add(exitItem);
-		
+
 		JMenu advancedMenu = new JMenu("Zaawansowane");
 		mbar.add(advancedMenu);
-		
-		//Opcje zaawansowane
-		JMenuItem advancedCompare = new JMenuItem("Zaawansowane Porównywanie");
+
+		// Opcje zaawansowane
+		JMenuItem advancedCompare = new JMenuItem("Porównywanie dwóch");
 		advancedCompare.addActionListener(new AdvancedCompare());
 		advancedMenu.add(advancedCompare);
+		JMenuItem advancedCompareTest = new JMenuItem("Porównywanie dwóch Test");
+		advancedCompareTest.addActionListener(new AdvancedCompareTest());
+		advancedMenu.add(advancedCompareTest);
 		// Tworzenie logu oraz puliptu
 		desktop = new JDesktopPane();
 		desktop.setBackground(new Color(176, 196, 222));
@@ -204,9 +208,10 @@ public class CsvFrame extends JFrame implements Serializable {
 						petle2++;
 					}
 
-					final String[][] niepowtarzalne = Csv_File.removeDoubleData(niepowtarzalne1);
+					final String[][] niepowtarzalne = Csv_File
+							.removeDoubleData(niepowtarzalne1);
 					final String[] nameOfColumns = test;
-					int petle11 = petle1 +1;
+					int petle11 = petle1 + 1;
 					csvInsert.setForeground(new Color(0, 100, 0));
 					csvInsert
 							.append("Niepowtarzające: "
@@ -383,20 +388,15 @@ public class CsvFrame extends JFrame implements Serializable {
 		}
 	}
 
-	private class ConnectAction implements
-			ActionListener {
-		
+	private class ConnectAction implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
 
 			if (dialog == null)
 				dialog = new CsvChooser();
 			if (dialog.showDialog(CsvFrame.this, "Wybierz Plik")) {
-				
-		
-			
+
 				Csv_File file = CsvChooser.file;
-			
 
 				csvInsert.setForeground(new Color(0, 100, 0));
 				int wczyt = file.getCsvFileRows();
@@ -404,13 +404,15 @@ public class CsvFrame extends JFrame implements Serializable {
 						+ file.getCsvFileName()
 						+ "\". Ilość wczytanych danych " + wczyt
 						+ " Rekordów;\r\n");
-			
-			generuj = GenerateButton.addButton("Generuj",file);
-			add(generuj, BorderLayout.NORTH);
-			};
+
+				generuj = GenerateButton.addButton("Generuj", file);
+				add(generuj, BorderLayout.NORTH);
+			}
+			;
 		}
 	}
-	private class AdvancedCompare implements ActionListener{
+
+	private class AdvancedCompare implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
 			if (advancedCompareTwoCsv == null)
@@ -432,7 +434,6 @@ public class CsvFrame extends JFrame implements Serializable {
 					String[][] secondFileTable = Csv_File.readData(
 							secondFilePath, test2);
 					// Sprawdzanie poprawności według kolumn
-					
 
 					int petle1 = 0;
 					int pow1 = 0;
@@ -445,8 +446,9 @@ public class CsvFrame extends JFrame implements Serializable {
 								inne1++;
 								break;
 							}
-							if ((firstFileTable[petle1][f1].equals(secondFileTable[petle2][f2])&&
-								firstFileTable[petle1][s1].equals(secondFileTable[petle2][s2]))) {
+							if ((firstFileTable[petle1][f1]
+									.equals(secondFileTable[petle2][f2]) && firstFileTable[petle1][s1]
+									.equals(secondFileTable[petle2][s2]))) {
 								pow1++;
 								break;
 							}
@@ -460,8 +462,9 @@ public class CsvFrame extends JFrame implements Serializable {
 							inne1++;
 							break;
 						}
-						if ((firstFileTable[firstFileTable.length - 1][f1].equals(secondFileTable[petle2][f2])&&
-							firstFileTable[firstFileTable.length - 1][s1].equals(secondFileTable[petle2][s2]))) {
+						if ((firstFileTable[firstFileTable.length - 1][f1]
+								.equals(secondFileTable[petle2][f2]) && firstFileTable[firstFileTable.length - 1][s1]
+								.equals(secondFileTable[petle2][s2]))) {
 							pow1++;
 							break;
 						}
@@ -484,12 +487,13 @@ public class CsvFrame extends JFrame implements Serializable {
 								newDate++;
 								break;
 							}
-							if ((firstFileTable[petle1][f1].equals(secondFileTable[petle2][f2])&&
-								firstFileTable[petle1][s1].equals(secondFileTable[petle2][s2]))) {
+							if ((firstFileTable[petle1][f1]
+									.equals(secondFileTable[petle2][f2]) && firstFileTable[petle1][s1]
+									.equals(secondFileTable[petle2][s2]))) {
 								// Usuwa powtarzajaco dana
 								for (int i = 0; i < firstFileTable[petle1].length; i++) {
 									powtarjace[copy][i] = firstFileTable[petle1][i];
-									
+
 								}
 								copy++;
 								break;
@@ -499,6 +503,7 @@ public class CsvFrame extends JFrame implements Serializable {
 						petle1++;
 					}
 					petle2 = 0;
+					
 					while (petle2 <= secondFileTable.length) {
 						if (petle2 == secondFileTable.length) {
 							for (int i = 0; i < firstFileTable[firstFileTable.length - 1].length; i++) {
@@ -507,12 +512,13 @@ public class CsvFrame extends JFrame implements Serializable {
 							newDate++;
 							break;
 						}
-						
-						if ((firstFileTable[petle1][f1].equals(secondFileTable[petle2][f2])&&
-							firstFileTable[petle1][s1].equals(secondFileTable[petle2][s2]))) {
+
+						if ((firstFileTable[petle1][f1]
+								.equals(secondFileTable[petle2][f2]) && firstFileTable[petle1][s1]
+								.equals(secondFileTable[petle2][s2]))) {
 							for (int i = 0; i < firstFileTable[firstFileTable.length - 1].length; i++) {
 								powtarjace[copy][i] = firstFileTable[firstFileTable.length - 1][i];
-						
+
 							}
 							copy++;
 							break;
@@ -520,10 +526,14 @@ public class CsvFrame extends JFrame implements Serializable {
 						petle2++;
 					}
 					String[][] tmp;
-					if(niepowtarzalne1.length == 0){tmp = niepowtarzalne1;}else{tmp = Csv_File.removeDoubleData(niepowtarzalne1);}
+					if (niepowtarzalne1.length == 0) {
+						tmp = niepowtarzalne1;
+					} else {
+						tmp = Csv_File.removeDoubleData(niepowtarzalne1);
+					}
 					final String[][] niepowtarzalne = tmp;
 					final String[] nameOfColumns = test;
-					int petle11 = petle1 +1;
+					int petle11 = petle1 + 1;
 					csvInsert.setForeground(new Color(0, 100, 0));
 					csvInsert
 							.append("Niepowtarzające: "
@@ -538,10 +548,17 @@ public class CsvFrame extends JFrame implements Serializable {
 							niepowtarzalne, powtarjace, nameOfColumns);
 
 					add(generuj, BorderLayout.NORTH);
-			
+
+				}
+			}
 		}
+
 	}
-}
-	
-}
+	private class AdvancedCompareTest implements ActionListener {
+
+		public void actionPerformed(ActionEvent arg0) {
+			if (advancedCompareTwoCsvTest == null)
+				advancedCompareTwoCsvTest = new CompareTwoCsv();
+			if (advancedCompareTwoCsvTest.showDialog(CsvFrame.this, "Wybierz Plik")) {}
+		}}
 }

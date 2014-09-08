@@ -8,6 +8,7 @@ package csv_reader;
  */
 import java.awt.EventQueue;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class Csv_Reader {
@@ -24,6 +25,8 @@ public class Csv_Reader {
 				frame.invalidate();
 				frame.validate();
 				frame.repaint();
+				ImageIcon iconImage = new ImageIcon(this.getClass().getResource("csv_icon.png"));
+		        frame.setIconImage(iconImage.getImage());
 			}
 		});
 	}

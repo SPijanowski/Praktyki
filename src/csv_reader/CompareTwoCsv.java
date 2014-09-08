@@ -20,13 +20,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.io.File;
 
 import javax.swing.JList;
+import javax.swing.JComboBox;
+import java.awt.Font;
+import javax.swing.JSeparator;
+import java.awt.Color;
 
 public class CompareTwoCsv extends JPanel {
 
@@ -34,11 +37,8 @@ public class CompareTwoCsv extends JPanel {
 	private boolean ok;
 	private JDialog dialog;
 	private JButton okButton;
-	private JButton btnNewButton_1;
 	private JButton btnWybierzDrugiPlik;
 	private JFileChooser csvFirstFileChooser;
-	private JList list;
-	private JList list_1;
 	public static String firstFilePath;
 	
 	private static String firstSeparator;
@@ -53,7 +53,7 @@ public class CompareTwoCsv extends JPanel {
 	private static String[] secondDataArray;
 	private static int firstFileRow;
 	private static int secondFileRow;
-	private static JList list1;
+
 
 	
 	public CompareTwoCsv() {
@@ -83,18 +83,23 @@ public class CompareTwoCsv extends JPanel {
 		
 		
 		JLabel lblNewLabel = new JLabel("Porównanie plików CSV");
+		lblNewLabel.setFont(lblNewLabel.getFont().deriveFont(lblNewLabel.getFont().getStyle() | Font.BOLD, lblNewLabel.getFont().getSize() + 5f));
 		
 		JLabel label = new JLabel("Dane pierwszego pliku");
+		label.setFont(new Font("Tahoma", Font.BOLD, 11));
+		
+		JComboBox firstFileFirstColumn = new JComboBox();
+		
+		JComboBox firstFileSecondColumn = new JComboBox();
+		
+		JComboBox secondFileFirstColumn = new JComboBox();
+		
+		JComboBox secondFileSecondColumn = new JComboBox();
 		
 		JLabel label_1 = new JLabel("Dane drugiego pliku");
-		@SuppressWarnings("rawtypes")
-		JList list_2 = new JList();
-		JScrollPane list_1 = new JScrollPane(list_2);
-		@SuppressWarnings("rawtypes")
-		
-		JScrollPane list = new JScrollPane(list1);
-		final JButton btnWybierzPierwszyPlik = new JButton("Wybierz pierwszy plik");
-		btnWybierzPierwszyPlik.addActionListener(new ActionListener() {
+		label_1.setFont(label_1.getFont().deriveFont(label_1.getFont().getStyle() | Font.BOLD));
+		final JButton wybierz1 = new JButton("Wybierz pierwszy plik");
+		wybierz1.addActionListener(new ActionListener() {
 			
 
 			public void actionPerformed(ActionEvent event) {
@@ -105,7 +110,7 @@ public class CompareTwoCsv extends JPanel {
 					firstFilePath = csvFirstFileChooser.getSelectedFile()
 							.getPath();
 					setFirstFilePath(firstFilePath);
-					btnWybierzPierwszyPlik.setEnabled(false);
+					wybierz1.setEnabled(false);
 					SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 						
 						
@@ -138,23 +143,21 @@ public class CompareTwoCsv extends JPanel {
 								}
 							}); 
 						
-							JScrollPane scroll = new JScrollPane(list);
-							list1 = list;
+							btnWybierzDrugiPlik.setEnabled(true);
 							return null;}
 						protected void done(){
 							
-							btnWybierzPierwszyPlik.setEnabled(true);
+							wybierz1.setEnabled(true);
 							Toolkit.getDefaultToolkit().beep();
-							btnWybierzDrugiPlik.setEnabled(true);
+							
 						}};
 					worker.execute();
 				}
 				}
 			});
 		
-		final JButton btnWybierzDrugiPlik = new JButton("Wybierz drugi plik");
-		btnWybierzDrugiPlik.setEnabled(false);
-		btnWybierzDrugiPlik.addActionListener(new ActionListener() {
+		final JButton wybierz2 = new JButton("Wybierz drugi plik");
+		wybierz2.addActionListener(new ActionListener() {
 			
 
 			public void actionPerformed(ActionEvent event) {
@@ -205,7 +208,7 @@ public class CompareTwoCsv extends JPanel {
 						protected void done() {
 							Toolkit.getDefaultToolkit().beep();
 							okButton.setEnabled(true);
-							btnWybierzDrugiPlik.setEnabled(false);
+							wybierz2.setEnabled(false);
 						}
 					};
 					worker.execute();
@@ -213,7 +216,23 @@ public class CompareTwoCsv extends JPanel {
 				}
 			});
 		
-		JScrollPane scrollPane = new JScrollPane();
+		
+		
+		JLabel lblPierwszaKolumna = new JLabel("Pierwsza kolumna");
+		lblPierwszaKolumna.setFont(new Font("Tahoma", Font.ITALIC, 11));
+		
+		JLabel label_2 = new JLabel("Pierwsza kolumna");
+		label_2.setFont(new Font("Tahoma", Font.ITALIC, 11));
+		
+		JLabel lblDrugaKolumna = new JLabel("Druga kolumna");
+		lblDrugaKolumna.setForeground(Color.RED);
+		lblDrugaKolumna.setFont(new Font("Tahoma", Font.ITALIC, 11));
+		
+		JLabel label_3 = new JLabel("Druga kolumna");
+		label_3.setForeground(Color.RED);
+		label_3.setFont(new Font("Tahoma", Font.ITALIC, 11));
+		
+		JSeparator separator = new JSeparator();
 		
 		
 		
@@ -222,69 +241,85 @@ public class CompareTwoCsv extends JPanel {
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(84)
-					.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
-					.addGap(85))
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-					.addComponent(btnWybierzDrugiPlik)
+					.addComponent(wybierz2)
 					.addGap(19))
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(label, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-					.addComponent(btnWybierzPierwszyPlik)
-					.addContainerGap())
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(40)
-					.addComponent(list_1, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(64, Short.MAX_VALUE))
-				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(37)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(list, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(okButton, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-							.addGap(72)
-							.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)))
+					.addComponent(okButton, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+					.addGap(72)
+					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
 					.addGap(61))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(label, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
+						.addComponent(firstFileFirstColumn, GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)
+						.addComponent(secondFileFirstColumn, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblPierwszaKolumna)
+						.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(label_3, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblDrugaKolumna)
+							.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(wybierz1)
+								.addComponent(firstFileSecondColumn, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
+								.addComponent(secondFileSecondColumn, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE))
+							.addContainerGap())))
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addGap(54)
+					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(62, Short.MAX_VALUE))
+				.addComponent(separator, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblNewLabel)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGap(11)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label)
-						.addComponent(btnWybierzPierwszyPlik))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(list_1, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+						.addComponent(wybierz1))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_2)
+						.addComponent(label_3))
+					.addPreferredGap(ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(firstFileSecondColumn, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+						.addComponent(firstFileFirstColumn, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addGap(25)
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label_1)
-						.addComponent(btnWybierzDrugiPlik))
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(13)
-							.addComponent(list, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnNewButton_1)
-								.addComponent(okButton)))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(37)
-							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(wybierz2))
+					.addGap(24)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblPierwszaKolumna)
+						.addComponent(lblDrugaKolumna))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(secondFileFirstColumn, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+						.addComponent(secondFileSecondColumn, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnNewButton_1)
+						.addComponent(okButton))
 					.addGap(19))
 		);
-		groupLayout.linkSize(SwingConstants.VERTICAL, new Component[] {btnWybierzPierwszyPlik, btnWybierzDrugiPlik});
+		groupLayout.linkSize(SwingConstants.VERTICAL, new Component[] {wybierz1, wybierz2});
 		groupLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {okButton, btnNewButton_1});
 		setLayout(groupLayout);
 
